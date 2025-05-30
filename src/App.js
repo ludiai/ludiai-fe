@@ -1,11 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
-import HappenstanceSearch from "./HappenstanceSearch";
+import CraftSearch from "./CraftSearch";
 
 function App() {
   return (
     <div className="App">
-      <HappenstanceSearch />
+      <CraftSearch />
     </div>
   );
 }

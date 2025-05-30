@@ -404,7 +404,7 @@ function ChatPanel({ craft, onClose }) {
   );
 }
 
-export default function HappenstanceSearch() {
+export default function CraftSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [searched, setSearched] = useState(false);
