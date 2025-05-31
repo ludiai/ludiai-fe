@@ -49,7 +49,6 @@ function ChatPanel({ craft, onClose }) {
   return (
     <div
       style={{
-        width: 340,
         background: "rgba(255,255,255,0.04)",
         borderLeft: "1.5px solid rgba(255,255,255,0.08)",
         display: "flex",
