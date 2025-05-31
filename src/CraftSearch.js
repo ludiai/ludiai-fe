@@ -265,11 +265,12 @@ export default function CraftSearch() {
 
   const handleSearch = () => {
     setSearchLoading(true);
-    const filtered = crafts.filter(
-      (craft) =>
-        craft.name.toLowerCase().includes(query.toLowerCase()) ||
-        craft.description.toLowerCase().includes(query.toLowerCase())
-    );
+    const filtered = crafts;
+    // const filtered = crafts.filter(
+    //   (craft) =>
+    //     craft.name.toLowerCase().includes(query.toLowerCase()) ||
+    //     craft.description.toLowerCase().includes(query.toLowerCase())
+    // );
     setTimeout(() => {
       setResults(filtered);
       setSearched(true);

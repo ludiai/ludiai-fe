@@ -6,8 +6,7 @@ export const crafts = [
     location: "Tracunhaém, Pernambuco, Brazil",
     description:
       "A powerful clay lion sculpture with serene features and delicately hand-sculpted spiral motifs—an emblem of Brazilian folk art by master artisan Mestre Nuca.",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Escultura_de_le%C3%A3o_-_Mestre_Nuca.jpg/640px-Escultura_de_le%C3%A3o_-_Mestre_Nuca.jpg",
+    image: "/images/1.jpeg",
   },
   {
     id: 2,
@@ -16,7 +15,7 @@ export const crafts = [
     location: "Tracunhaém, Pernambuco, Brazil",
     description:
       "Sculpted from reclaimed wood with symbolic intent, Mito's handcrafted bench exudes silent strength and ancestral reverence. Each curve and cut is born from intuition, not plans.",
-    image: "https://example.com/mito-bench.jpg",
+    image: "/images/2.jpeg",
   },
   {
     id: 3,
@@ -25,7 +24,7 @@ export const crafts = [
     location: "Tracunhaém, Pernambuco, Brazil",
     description:
       "Blending tradition and innovation, Rafael's expressive clay figures—saints, animals, hybrids—emerge with asymmetry and soul, breathing new life into Brazilian ceramic heritage.",
-    image: "https://example.com/rafael-clay.jpg",
+    image: "/images/3.jpeg",
   },
   {
     id: 4,
@@ -34,7 +33,7 @@ export const crafts = [
     location: "Nova Olinda, Ceará, Brazil",
     description:
       "Melding vaqueiro tradition with bold design, Espedito Seleiro's handcrafted leatherwork features vibrant colors, embossed geometry, and storytelling rooted in the Brazilian sertão.",
-    image: "https://example.com/espedito-chair.jpg",
+    image: "/images/4.jpeg",
   },
   {
     id: 5,
@@ -43,7 +42,7 @@ export const crafts = [
     location: "Bezerros, Pernambuco, Brazil",
     description:
       "A hand-carved woodblock print teeming with folkloric scenes, humor, and humanity, J. Borges' iconic style brings Brazil's cordel storytelling to vivid visual life.",
-    image: "https://example.com/jborges-print.jpg",
+    image: "/images/5.jpeg",
   },
   {
     id: 6,
@@ -52,7 +51,7 @@ export const crafts = [
     location: "Camaragibe, Pernambuco, Brazil",
     description:
       "A richly embroidered Maracatu caboclo costume, echoing Mestre Salu's lifelong devotion to culture, music, and movement — a living tapestry of Pernambuco's traditions.",
-    image: "https://example.com/mestre-salu.jpg",
+    image: "/images/6.jpeg",
   },
   {
     id: 7,
@@ -61,7 +60,7 @@ export const crafts = [
     location: "Ayacucho & Lima, Peru",
     description:
       "A monumental handwoven tapestry glowing with sacred geometry and color, Máximo Laura's textile bridges pre-Columbian iconography with cosmic spirituality.",
-    image: "https://example.com/maximo-tapestry.jpg",
+    image: "/images/7.jpeg",
   },
   {
     id: 8,
@@ -70,7 +69,7 @@ export const crafts = [
     location: "Lagoa do Carro, Pernambuco, Brazil",
     description:
       "Maria's handwoven rug is a visual poem—crafted row by row with lived patterns and generational wisdom. Her loom tells stories of drought, harvest, and resilience.",
-    image: "https://example.com/maria-rug.jpg",
+    image: "/images/8.jpeg",
   },
   {
     id: 9,
@@ -79,7 +78,7 @@ export const crafts = [
     location: "Bloomington, Indiana, USA",
     description:
       "A meditative indigo-dyed cloth grown, fermented, and dyed by hand. Ricketts' work transforms textile into slow ritual, weaving together agriculture, aesthetics, and time.",
-    image: "https://example.com/ricketts-indigo.jpg",
+    image: "/images/9.jpeg",
   },
   {
     id: 10,
@@ -88,7 +87,7 @@ export const crafts = [
     location: "Nantong, Jiangsu, China",
     description:
       "Wang Zhenxing's hand-carved stencils and rice-paste resist create intricate blue-and-white cloths. Each piece reflects centuries-old indigo traditions of Jiangsu.",
-    image: "https://example.com/wang-indigocloth.jpg",
+    image: "/images/10.jpeg",
   },
   {
     id: 11,
@@ -97,7 +96,7 @@ export const crafts = [
     location: "Hangzhou, China",
     description:
       "Elegant and meditative, Chen Zhijian's contemporary wood sculptures echo Buddhist relics and Daoist philosophy. Each piece evokes stillness, fluidity, and the essence of form.",
-    image: "https://example.com/chen-zhijian.jpg",
+    image: "/images/11.jpeg",
   },
   {
     id: 12,
@@ -106,7 +105,7 @@ export const crafts = [
     location: "China",
     description:
       "Xu Hai's hand-carved pipes blend functionality with Chinese metaphysics. His work draws on calligraphy, Daoist motifs, and the meditative union of fire, breath, and design.",
-    image: "https://example.com/xu-hai.jpg",
+    image: "/images/12.jpeg",
   },
   {
     id: 13,
@@ -115,7 +114,7 @@ export const crafts = [
     location: "Yunnan, China",
     description:
       "Ephemeral yet intricate, Xiao Huang's fruit and vegetable carvings celebrate fleeting beauty and Buddhist ritual. Each performance-carving is a moment of grace made visible.",
-    image: "https://example.com/xiao-huang.jpg",
+    image: "/images/13.jpeg",
   },
   {
     id: 14,
@@ -124,7 +123,7 @@ export const crafts = [
     location: "Beijing, China",
     description:
       "Crafted with dynastic techniques, Shan Bai's scholar tools — from inkstone boxes to bamboo carvings — embody the refined aesthetics and philosophical depth of ancient China.",
-    image: "https://example.com/shan-bai.jpg",
+    image: "/images/14.jpeg",
   },
   {
     id: 15,
@@ -133,7 +132,7 @@ export const crafts = [
     location: "Santiago Atitlán, Guatemala & Copenhagen, Denmark",
     description:
       "Melding Mayan beadwork tradition with contemporary design, Pura Utz's pieces empower indigenous women while celebrating vibrant, handcrafted beauty.",
-    image: "https://example.com/pura-utz.jpg",
+    image: "/images/15.jpeg",
   },
   {
     id: 16,
@@ -142,7 +141,7 @@ export const crafts = [
     location: "Quetzaltenango, Guatemala",
     description:
       "Handwoven by indigenous women, Trama Textiles' fabrics preserve ancestral Guatemalan techniques and foster fair trade, sustainability, and community development.",
-    image: "https://example.com/trama-textiles.jpg",
+    image: "/images/16.jpeg",
   },
   {
     id: 17,
@@ -151,7 +150,7 @@ export const crafts = [
     location: "Paris, France",
     description:
       "Curated from rural French potters, each La Tuile à Loup ceramic carries the terroir and history of a region, reintroducing craftsmanship into everyday rituals.",
-    image: "https://example.com/tuilealoup.jpg",
+    image: "/images/17.jpeg",
   },
   {
     id: 18,
@@ -160,7 +159,7 @@ export const crafts = [
     location: "Dinan, Brittany, France",
     description:
       "Flame-shaped and breath-blown, Adrian Colin's glasswork embodies precision and motion. Each piece is a luminous testament to the disappearing art of lampworking.",
-    image: "https://example.com/adrian-colin.jpg",
+    image: "/images/18.jpeg",
   },
   {
     id: 19,
@@ -169,7 +168,7 @@ export const crafts = [
     location: "Paimpol, Brittany, France",
     description:
       "Massive and poetic, Ferber's steel sculptures echo ancient forms with a raw beauty forged in fire, weather, and time. His open-air works dialogue with nature.",
-    image: "https://example.com/eric-ferber.jpg",
+    image: "/images/19.jpeg",
   },
   {
     id: 20,
@@ -178,7 +177,7 @@ export const crafts = [
     location: "Paris, France",
     description:
       "Reinventing featherwork for haute couture and contemporary art, Julien Vermeulen crafts intricate, luminous creations that merge ancestral skill with modern vision.",
-    image: "https://example.com/julien-vermeulen.jpg",
+    image: "/images/20.jpeg",
   },
   {
     id: 21,
@@ -187,7 +186,7 @@ export const crafts = [
     location: "Paris, France",
     description:
       "Crafted using the 18th-century terre mêlée technique, Sylvie's marbled ceramics swirl layers of colored clay into bold, organic patterns — a tactile interplay of earth and movement.",
-    image: "https://example.com/sylvie-perrin.jpg",
+    image: "/images/21.jpeg",
   },
   {
     id: 22,
@@ -196,7 +195,7 @@ export const crafts = [
     location: "Qingshen County, Sichuan Province, China",
     description:
       "Zhang Deming's refined bamboo weavings honor Qingshen tradition with subtle patterning and natural fiber tones. Each handcrafted object carries ecological memory and time-honored skill.",
-    image: "https://example.com/zhang-deming.jpg",
+    image: "/images/22.jpeg",
   },
   {
     id: 23,
@@ -205,7 +204,7 @@ export const crafts = [
     location: "La Paz, Bolivia",
     description:
       "Fusing Aymara heritage with fashion design, Eliana's polleras and mantas reframe indigenous aesthetics for international runways — bold expressions of cultural pride and authorship.",
-    image: "https://example.com/eliana-paco.jpg",
+    image: "/images/23.jpeg",
   },
   {
     id: 24,
@@ -214,7 +213,7 @@ export const crafts = [
     location: "El Alto, Bolivia",
     description:
       "Crafted in plaster and clay, William Luna's sculpted masks bring personalized presence to tantawawa rituals — ephemeral tributes carved from memory, mourning, and clay.",
-    image: "https://example.com/william-luna.jpg",
+    image: "/images/24.jpeg",
   },
   {
     id: 25,
@@ -223,7 +222,7 @@ export const crafts = [
     location: "Talagante, Metropolitan Region, Chile",
     description:
       "Narrative ceramic scenes of everyday Chilean life and religious iconography, Talagante's loza policromada features hand-painted characters that reflect humor, spirit, and community.",
-    image: "https://example.com/talagante.jpg",
+    image: "/images/25.jpeg",
   },
   {
     id: 26,
@@ -232,7 +231,7 @@ export const crafts = [
     location: "La Plata, Buenos Aires Province, Argentina",
     description:
       "Handcrafted Latin American string instruments with acoustic precision and artisanal beauty. Mariano's guitars blend traditional lutherie with innovation and global resonance.",
-    image: "https://example.com/mariano-delledonne.jpg",
+    image: "/images/26.jpeg",
   },
   {
     id: 27,
@@ -241,7 +240,7 @@ export const crafts = [
     location: "Nantucket, MA, USA",
     description:
       "A refined take on the historic Nantucket Lightship Basket, Tim's designs integrate traditional cane weaving with carved lids and modern creativity, preserving an American legacy.",
-    image: "https://example.com/tim-parsons.jpg",
+    image: "/images/27.jpeg",
   },
   {
     id: 28,
@@ -250,7 +249,7 @@ export const crafts = [
     location: "Cambridge, MA, USA",
     description:
       "Combining Japanese craft philosophy and New England tradition, Etsuko's baskets are sculptural vessels of lightness, precision, and intercultural continuity.",
-    image: "https://example.com/etsuko-yashiro.jpg",
+    image: "/images/28.jpeg",
   },
   {
     id: 29,
@@ -259,7 +258,7 @@ export const crafts = [
     location: "Gorham, ME, USA (Originally from Rwanda)",
     description:
       "Vibrant, coiled baskets woven from dyed sisal and sweetgrass. Ange's work bridges memory and empowerment, preserving Rwandan tradition and uplifting female artisans.",
-    image: "https://example.com/ange-muhorakeye.jpg",
+    image: "/images/29.jpeg",
   },
   {
     id: 30,
@@ -268,6 +267,6 @@ export const crafts = [
     location: "Barcelona, Catalonia, Spain",
     description:
       "Meticulously hand-embossed and dyed, Julián's leather mosaics blend Islamic geometry and Mediterranean motifs into tactile works of contemporary reverence.",
-    image: "https://example.com/julian-sanudo.jpg",
+    image: "/images/30.jpeg",
   },
 ];
