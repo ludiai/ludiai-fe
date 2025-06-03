@@ -497,7 +497,7 @@ export default function LandingPage() {
               marginTop: 8,
             }}
           >
-            Together, let’s redefine how the world values knowledge.
+            Let's redefine how the world values knowledge.
           </div>
         </div>
       </div>
