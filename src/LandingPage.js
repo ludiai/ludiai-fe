@@ -126,6 +126,8 @@ export default function LandingPage() {
   const pageSize = 6;
   const totalPages = Math.ceil(crafts.length / pageSize);
   const pagedCrafts = crafts.slice(page * pageSize, (page + 1) * pageSize);
+  const [email, setEmail] = React.useState("");
+  const [formStatus, setFormStatus] = React.useState(null); // null | 'success' | 'error'
   return (
     <div
       style={{
@@ -149,28 +151,18 @@ export default function LandingPage() {
       >
         <h1
           style={{
-            fontSize: "3.2rem",
+            fontSize: "2.1rem",
             fontWeight: 800,
-            letterSpacing: "-2px",
+            letterSpacing: "-1px",
             marginBottom: "0.5rem",
-            background: "linear-gradient(90deg, #fff 60%, #b6e0ff 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          Ludi
-        </h1>
-        <h2
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: 600,
+            background: "none",
             color: "#b6e0ff",
-            letterSpacing: "-0.5px",
-            marginBottom: "0.3rem",
+            WebkitBackgroundClip: "unset",
+            WebkitTextFillColor: "unset",
           }}
         >
-          World Crafts, Preserved by AI
-        </h2>
+          Craft is our Code
+        </h1>
         <p
           style={{
             color: "#e0e0e0",
@@ -181,7 +173,7 @@ export default function LandingPage() {
             marginBottom: 8,
           }}
         >
-          Discover, preserve, and celebrate rare crafts—powered by AI.
+          A global movement to empower artisan communities through ethical AI.
         </p>
       </header>
 
@@ -389,19 +381,139 @@ export default function LandingPage() {
           >
             Join the Ludi Circle
           </h2>
-          <img
-            src={process.env.PUBLIC_URL + "/assets/seed-invitation-letter.jpeg"}
-            alt="Invitation letter to join the Ludi Circle"
+          <p
             style={{
-              width: "100%",
-              maxWidth: 420,
-              borderRadius: 14,
-              boxShadow: "0 2px 16px rgba(0,0,0,0.18)",
-              marginBottom: 0,
-              background: "#fff",
-              objectFit: "contain",
+              color: "#e0e0e0",
+              fontSize: "1.08rem",
+              textAlign: "center",
+              marginBottom: 18,
             }}
-          />
+          >
+            Be part of a living platform that bridges ancestral knowledge and
+            AI. Enter your email to receive early updates and become a founding
+            ally.
+          </p>
+          <p
+            style={{
+              color: "#e0e0e0",
+              fontSize: "1.08rem",
+              textAlign: "center",
+              marginBottom: 18,
+            }}
+          ></p>
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+              gap: 12,
+              marginBottom: 16,
+            }}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setFormStatus(null);
+              try {
+                const formData = new FormData();
+                formData.append("entry.1354930904", email);
+                const response = await fetch(
+                  "https://docs.google.com/forms/d/e/1FAIpQLSdvzgrDpC2DMuyyk24XwcNYZNS8fuu7JyEykfI6F8dEeIENNw/formResponse",
+                  {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: formData,
+                  }
+                );
+                setFormStatus("success");
+                setEmail("");
+              } catch (err) {
+                setFormStatus("error");
+              }
+            }}
+          >
+            <label htmlFor="ludi-email" style={{ display: "none" }}>
+              Email
+            </label>
+            <div style={{ display: "flex", width: "100%", gap: 8 }}>
+              <input
+                id="ludi-email"
+                type="email"
+                placeholder="Enter your email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: "0.7rem 1.1rem",
+                  borderRadius: 8,
+                  border: "1px solid #b6e0ff",
+                  fontSize: "1rem",
+                  outline: "none",
+                  background: "rgba(255,255,255,0.18)",
+                  color: "#fff",
+                  fontWeight: 500,
+                }}
+                disabled={formStatus === "success"}
+              />
+              <button
+                type="submit"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #61dafb 0%, #b6e0ff 100%)",
+                  color: "#0a0a0f",
+                  border: "none",
+                  borderRadius: 8,
+                  padding: "0.7rem 1.5rem",
+                  fontWeight: 700,
+                  fontSize: "1rem",
+                  cursor: formStatus === "success" ? "not-allowed" : "pointer",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                  letterSpacing: "-0.2px",
+                  transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                  opacity: formStatus === "success" ? 0.6 : 1,
+                }}
+                disabled={formStatus === "success"}
+              >
+                {formStatus === "success" ? "Joined!" : "Join Now"}
+              </button>
+            </div>
+            {formStatus === "success" && (
+              <div
+                style={{
+                  color: "#4caf50",
+                  marginTop: 10,
+                  fontWeight: 500,
+                  fontSize: "1.01rem",
+                  textAlign: "center",
+                }}
+              >
+                Thank you for joining! You'll receive early updates soon.
+              </div>
+            )}
+            {formStatus === "error" && (
+              <div
+                style={{
+                  color: "#ff5252",
+                  marginTop: 10,
+                  fontWeight: 500,
+                  fontSize: "1.01rem",
+                  textAlign: "center",
+                }}
+              >
+                Something went wrong. Please try again later.
+              </div>
+            )}
+          </form>
+          <div
+            style={{
+              color: "#b6e0ff",
+              fontSize: "1.01rem",
+              textAlign: "center",
+              marginTop: 8,
+            }}
+          >
+            Craft is our Code. Let's reimagine knowledge together.
+          </div>
         </div>
       </div>
       <AnimatePresence>
@@ -422,16 +534,7 @@ export default function LandingPage() {
           opacity: 0.85,
         }}
       >
-        <div style={{ marginBottom: 6 }}>
-          Contact us at:{" "}
-          <a
-            href="mailto:sandra_boccia@harvard.edu"
-            style={{ color: "#b6e0ff", textDecoration: "none" }}
-          >
-            sandra_boccia@harvard.edu
-          </a>
-        </div>
-        © {new Date().getFullYear()} Ludi AI. All rights reserved.
+        ©️ 2025 useludi.org— All rights reserved.
       </footer>
     </div>
   );
