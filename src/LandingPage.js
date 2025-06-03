@@ -187,21 +187,6 @@ export default function LandingPage() {
         }}
       >
         <div
-          style={{ display: "flex", alignItems: "center", marginBottom: 18 }}
-        >
-          <span
-            style={{
-              color: "#e0e0e0",
-              fontWeight: 600,
-              fontSize: "1.02rem",
-              letterSpacing: "0.5px",
-              opacity: 0.85,
-            }}
-          >
-            COMMUNITY ARTS
-          </span>
-        </div>
-        <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
@@ -512,7 +497,7 @@ export default function LandingPage() {
               marginTop: 8,
             }}
           >
-            Craft is our Code. Let's reimagine knowledge together.
+            Together, let’s redefine how the world values knowledge.
           </div>
         </div>
       </div>
