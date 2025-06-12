@@ -441,6 +441,7 @@ export default function LandingPage() {
     const CARD_HEIGHT = 540;
     return (
       <div
+        className="ludi-focus-row"
         style={{
           minHeight: "100vh",
           width: "100vw",
@@ -457,6 +458,7 @@ export default function LandingPage() {
         }}
       >
         <div
+          className="ludi-focus-card"
           style={{
             width: CARD_WIDTH,
             height: CARD_HEIGHT,
@@ -577,6 +579,7 @@ export default function LandingPage() {
         />
         {showChat && (
           <div
+            className="ludi-focus-chat"
             style={{
               width: CARD_WIDTH,
               height: CARD_HEIGHT,
@@ -642,488 +645,636 @@ export default function LandingPage() {
 
   // Main search UI with pagination and join section at the bottom
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        width: "100vw",
-        background: "#000",
-        color: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        padding: "0 0 4rem 0",
-      }}
-    >
-      <h1
+    <>
+      {/* Modern Header */}
+      <header
         style={{
-          fontSize: "2.7rem",
-          marginBottom: "2.5rem",
-          fontWeight: 700,
-          letterSpacing: "-1px",
-        }}
-      >
-        What craft are you looking for?
-      </h1>
-      <div
-        style={{
-          background: "rgba(255,255,255,0.04)",
-          borderRadius: "16px",
-          padding: "2.2rem 2.5rem 2rem 2.5rem",
-          width: "100%",
-          maxWidth: "600px",
-          boxShadow: "0 4px 32px rgba(0,0,0,0.7)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: 68,
+          background: "#0a0a0f",
+          color: "#b6e0ff",
+          fontWeight: 900,
+          fontSize: "2rem",
+          letterSpacing: "-1.5px",
+          zIndex: 2000,
           display: "flex",
           alignItems: "center",
-          marginBottom: "1.5rem",
-          border: "1px solid rgba(255,255,255,0.08)",
+          justifyContent: "flex-start",
+          boxShadow: "0 2px 16px 0 rgba(20,30,60,0.18)",
+          borderBottom: "1px solid #23242a",
+          padding: "0 0 0 40px",
         }}
       >
-        <textarea
-          placeholder="Describe what you want, e.g. a cozy, hand-knitted item..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+        <span
           style={{
-            width: "80%",
-            minHeight: "56px",
-            maxHeight: "160px",
-            padding: "1.1rem 1.3rem",
-            borderRadius: "10px",
-            border: "1px solid rgba(255,255,255,0.12)",
-            fontSize: "1.1rem",
-            background: "rgba(255,255,255,0.07)",
-            color: "#fff",
-            outline: "none",
-            resize: "vertical",
-            lineHeight: 1.5,
-            fontFamily: "inherit",
-            boxShadow: "none",
-            marginRight: "1.2rem",
+            background: "linear-gradient(90deg, #61dafb 0%, #b6e0ff 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: 900,
+            fontSize: "2rem",
+            letterSpacing: "-1.5px",
+            lineHeight: 1,
           }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSearch();
+        >
+          Ludi
+        </span>
+        <style>{`
+          @media (max-width: 600px) {
+            header {
+              height: 54px !important;
+              padding-left: 16px !important;
             }
-          }}
-          disabled={searchLoading}
-        />
-        <button
-          onClick={handleSearch}
-          style={{
-            background: searchLoading
-              ? "rgba(255,255,255,0.12)"
-              : "rgba(255,255,255,0.12)",
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.18)",
-            borderRadius: "50%",
-            width: "48px",
-            height: "48px",
-            cursor: searchLoading ? "not-allowed" : "pointer",
-            fontSize: "1.7rem",
-            verticalAlign: "middle",
-            transition: "background 0.2s, color 0.2s, transform 0.1s",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: searchLoading ? 0.7 : 1,
-          }}
-          onMouseOver={(e) => {
-            if (!searchLoading)
-              e.currentTarget.style.background = "rgba(255,255,255,0.22)";
-          }}
-          onMouseOut={(e) => {
-            if (!searchLoading)
-              e.currentTarget.style.background = "rgba(255,255,255,0.12)";
-          }}
-          onMouseDown={(e) => {
-            if (!searchLoading) e.currentTarget.style.transform = "scale(0.93)";
-          }}
-          onMouseUp={(e) => {
-            if (!searchLoading) e.currentTarget.style.transform = "scale(1)";
-          }}
-          onMouseLeave={(e) => {
-            if (!searchLoading) e.currentTarget.style.transform = "scale(1)";
-          }}
-          disabled={searchLoading}
-        >
-          <span
-            style={{ display: "inline-block", transform: "rotate(-45deg)" }}
-          >
-            ↑
-          </span>
-        </button>
-      </div>
-      {searchLoading && (
-        <div
-          style={{
-            margin: "38px 0 0 0",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              color: "#fff",
-              borderRadius: 16,
-              padding: "1.2rem 1.6rem",
-              fontSize: "1.13rem",
-              minWidth: 260,
-              maxWidth: 340,
-              boxShadow: "0 2px 18px rgba(0,0,0,0.7)",
-              display: "flex",
-              alignItems: "center",
-              gap: 14,
-              fontWeight: 600,
-              letterSpacing: "-0.2px",
-              border: "1.5px solid rgba(255,255,255,0.08)",
-              marginBottom: 0,
-              justifyContent: "center",
-            }}
-          >
-            <span
-              style={{
-                flex: 1,
-                animation: "wordFlashing 1.2s infinite linear alternate",
-                display: "inline-block",
-                textAlign: "center",
-              }}
-            >
-              {searchReasoningTexts[searchReasoningIndex]}
-            </span>
-          </div>
-          <style>{`
-            @keyframes wordFlashing {
-              0% { opacity: 0.4; }
-              50% { opacity: 1; }
-              100% { opacity: 0.4; }
+            header span {
+              font-size: 1.3rem !important;
             }
-          `}</style>
-        </div>
-      )}
-      {searched && !searchLoading && (
-        <div
-          style={{
-            marginTop: "1.5rem",
-            width: "100%",
-            maxWidth: "900px",
-          }}
-        >
-          {pagedResults.length === 0 ? (
-            <div
-              style={{
-                color: "#bbb",
-                fontStyle: "italic",
-                padding: "1.5rem 0",
-              }}
-            >
-              No crafts found.
-            </div>
-          ) : (
-            <div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: 38,
-                  background: "none",
-                  padding: 0,
-                  minHeight: 420,
-                }}
-              >
-                {pagedResults.map((craft) => (
-                  <div
-                    key={craft.id}
-                    style={{
-                      width: "100%",
-                      aspectRatio: "1/1",
-                      cursor: "pointer",
-                      overflow: "hidden",
-                      borderRadius: 14,
-                      background: "none",
-                      boxShadow: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: 0,
-                      transition: "box-shadow 0.2s",
-                    }}
-                    onClick={() => {
-                      setFocusCraft(craft);
-                      setShowChat(true);
-                    }}
-                  >
-                    <img
-                      src={craft.image}
-                      alt={craft.name}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: 14,
-                        display: "block",
-                        background: "#222",
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-              {/* Pagination controls */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 22,
-                  marginTop: 32,
-                }}
-              >
-                <button
-                  onClick={() => setPage((prev) => Math.max(0, prev - 1))}
-                  disabled={page === 0}
-                  style={{
-                    background: page === 0 ? "#333" : "rgba(255,255,255,0.12)",
-                    color: page === 0 ? "#777" : "#fff",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    borderRadius: 10,
-                    padding: "0.7rem 1.5rem",
-                    fontWeight: 600,
-                    fontSize: "0.95rem",
-                    cursor: page === 0 ? "not-allowed" : "pointer",
-                    boxShadow:
-                      page === 0 ? "none" : "0 1px 4px rgba(0,0,0,0.7)",
-                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                    outline: "none",
-                  }}
-                  onMouseOver={(e) => {
-                    if (page !== 0)
-                      e.currentTarget.style.background =
-                        "rgba(255,255,255,0.22)";
-                  }}
-                  onMouseOut={(e) => {
-                    if (page !== 0)
-                      e.currentTarget.style.background =
-                        "rgba(255,255,255,0.12)";
-                  }}
-                >
-                  Previous
-                </button>
-                <div
-                  style={{
-                    color: "#aaa",
-                    fontSize: "0.95rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  Page {page + 1} of {totalPages}
-                </div>
-                <button
-                  onClick={() =>
-                    setPage((prev) => Math.min(totalPages - 1, prev + 1))
-                  }
-                  disabled={page === totalPages - 1}
-                  style={{
-                    background:
-                      page === totalPages - 1
-                        ? "#333"
-                        : "rgba(255,255,255,0.12)",
-                    color: page === totalPages - 1 ? "#777" : "#fff",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    borderRadius: 10,
-                    padding: "0.7rem 1.5rem",
-                    fontWeight: 600,
-                    fontSize: "0.95rem",
-                    cursor: page === totalPages - 1 ? "not-allowed" : "pointer",
-                    boxShadow:
-                      page === totalPages - 1
-                        ? "none"
-                        : "0 1px 4px rgba(0,0,0,0.7)",
-                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                    outline: "none",
-                  }}
-                  onMouseOver={(e) => {
-                    if (page !== totalPages - 1)
-                      e.currentTarget.style.background =
-                        "rgba(255,255,255,0.22)";
-                  }}
-                  onMouseOut={(e) => {
-                    if (page !== totalPages - 1)
-                      e.currentTarget.style.background =
-                        "rgba(255,255,255,0.12)";
-                  }}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-      {/* Join section at the bottom */}
+          }
+        `}</style>
+      </header>
       <div
         style={{
-          width: "100%",
+          minHeight: "100vh",
+          width: "100vw",
+          background: "#0a0a0f",
+          color: "#eaf6ff",
           display: "flex",
-          justifyContent: "center",
-          margin: "2.5rem 0 2.5rem 0",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          padding: "80px 0 4rem 0",
         }}
       >
-        <div
+        <style>{`
+          @media (max-width: 600px) {
+            .ludi-main-title {
+              font-size: 1.5rem !important;
+              margin-bottom: 1.2rem !important;
+              text-align: left !important;
+              padding-left: 8px;
+            }
+            .ludi-search-box {
+              padding: 1.2rem 0.7rem 1rem 0.7rem !important;
+              max-width: 98vw !important;
+              flex-direction: column !important;
+              align-items: stretch !important;
+            }
+            .ludi-search-box textarea {
+              width: 100% !important;
+              font-size: 1rem !important;
+              margin-right: 0 !important;
+              min-height: 38px !important;
+            }
+            .ludi-search-box .ludi-search-btn {
+              width: 48px !important;
+              height: 48px !important;
+              border-radius: 50% !important;
+              margin: 12px auto 0 auto !important;
+              display: flex !important;
+              align-items: center !important;
+              justify-content: center !important;
+              font-size: 1.5rem !important;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            }
+            .ludi-search-box .ludi-search-btn span {
+              transform: none !important;
+              font-size: 1.5rem !important;
+            }
+            .ludi-craft-grid {
+              grid-template-columns: 1fr !important;
+              gap: 18px !important;
+              min-height: 0 !important;
+              padding: 0 2vw !important;
+            }
+            .ludi-focus-row {
+              flex-direction: column !important;
+              align-items: stretch !important;
+              gap: 18px !important;
+              padding: 0 0 24px 0 !important;
+            }
+            .ludi-focus-card, .ludi-focus-chat {
+              width: 100% !important;
+              max-width: 98vw !important;
+              height: auto !important;
+              min-width: 0 !important;
+              min-height: 0 !important;
+              box-sizing: border-box !important;
+              border-radius: 16px !important;
+              padding: 1.2rem 0.7rem 1.2rem 0.7rem !important;
+            }
+            .ludi-focus-chat {
+              min-width: 0 !important;
+              min-height: 0 !important;
+            }
+            .ludi-focus-chat textarea {
+              width: 100% !important;
+              min-height: 38px !important;
+              font-size: 1rem !important;
+            }
+            .ludi-focus-chat button {
+              width: 100% !important;
+              margin-top: 10px !important;
+              height: 40px !important;
+              font-size: 1.1rem !important;
+            }
+          }
+        `}</style>
+        <h1
+          className="ludi-main-title"
           style={{
-            background: "rgba(255,255,255,0.10)",
-            borderRadius: 22,
-            boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
-            padding: "2rem 2rem 1.5rem 2rem",
-            maxWidth: 480,
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            fontSize: "2.7rem",
+            marginBottom: "2.5rem",
+            fontWeight: 700,
+            letterSpacing: "-1px",
           }}
         >
-          <h2
+          What craft are you looking for?
+        </h1>
+        <div
+          className="ludi-search-box"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            borderRadius: "16px",
+            padding: "2.2rem 2.5rem 2rem 2.5rem",
+            width: "100%",
+            maxWidth: "600px",
+            boxShadow: "0 4px 32px rgba(0,0,0,0.7)",
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1.5rem",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          <textarea
+            placeholder="Describe what you want, e.g. a cozy, hand-knitted item..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             style={{
-              color: "#b6e0ff",
-              fontWeight: 700,
-              fontSize: "1.35rem",
-              marginBottom: 18,
-              letterSpacing: "-0.5px",
-              textAlign: "center",
+              width: "80%",
+              minHeight: "56px",
+              maxHeight: "160px",
+              padding: "1.1rem 1.3rem",
+              borderRadius: "10px",
+              border: "1px solid rgba(255,255,255,0.12)",
+              fontSize: "1.1rem",
+              background: "rgba(255,255,255,0.07)",
+              color: "#fff",
+              outline: "none",
+              resize: "vertical",
+              lineHeight: 1.5,
+              fontFamily: "inherit",
+              boxShadow: "none",
+              marginRight: "1.2rem",
             }}
-          >
-            Leave your email to be the first to know what's coming
-          </h2>
-          <form
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+            disabled={searchLoading}
+          />
+          <button
+            className="ludi-search-btn"
+            onClick={handleSearch}
             style={{
+              background: searchLoading
+                ? "rgba(255,255,255,0.12)"
+                : "rgba(255,255,255,0.12)",
+              color: "#fff",
+              border: "1px solid rgba(255,255,255,0.18)",
+              borderRadius: "50%",
+              width: "48px",
+              height: "48px",
+              cursor: searchLoading ? "not-allowed" : "pointer",
+              fontSize: "1.7rem",
+              verticalAlign: "middle",
+              transition: "background 0.2s, color 0.2s, transform 0.1s",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              opacity: searchLoading ? 0.7 : 1,
+              marginTop: 0,
+            }}
+            onMouseOver={(e) => {
+              if (!searchLoading)
+                e.currentTarget.style.background = "rgba(255,255,255,0.22)";
+            }}
+            onMouseOut={(e) => {
+              if (!searchLoading)
+                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
+            }}
+            onMouseDown={(e) => {
+              if (!searchLoading)
+                e.currentTarget.style.transform = "scale(0.93)";
+            }}
+            onMouseUp={(e) => {
+              if (!searchLoading) e.currentTarget.style.transform = "scale(1)";
+            }}
+            onMouseLeave={(e) => {
+              if (!searchLoading) e.currentTarget.style.transform = "scale(1)";
+            }}
+            disabled={searchLoading}
+            aria-label="Search"
+          >
+            {/* Modern right arrow icon (SVG) */}
+            <span style={{ display: "inline-block", transform: "none" }}>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 11H16M16 11L12.5 7.5M16 11L12.5 14.5"
+                  stroke="#b6e0ff"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+        {searchLoading && (
+          <div
+            style={{
+              margin: "38px 0 0 0",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              width: "100%",
-              gap: 12,
-              marginBottom: 16,
-            }}
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setFormStatus(null);
-              try {
-                const formData = new FormData();
-                formData.append("entry.1354930904", email);
-                const response = await fetch(
-                  "https://docs.google.com/forms/d/e/1FAIpQLSdvzgrDpC2DMuyyk24XwcNYZNS8fuu7JyEykfI6F8dEeIENNw/formResponse",
-                  {
-                    method: "POST",
-                    mode: "no-cors",
-                    body: formData,
-                  }
-                );
-                setFormStatus("success");
-                setEmail("");
-              } catch (err) {
-                setFormStatus("error");
-              }
+              justifyContent: "center",
             }}
           >
-            <label htmlFor="ludi-email" style={{ display: "none" }}>
-              Email
-            </label>
-            <div style={{ display: "flex", width: "100%", gap: 8 }}>
-              <input
-                id="ludi-email"
-                type="email"
-                placeholder="Enter your email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+            <div
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                color: "#fff",
+                borderRadius: 16,
+                padding: "1.2rem 1.6rem",
+                fontSize: "1.13rem",
+                minWidth: 260,
+                maxWidth: 340,
+                boxShadow: "0 2px 18px rgba(0,0,0,0.7)",
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                fontWeight: 600,
+                letterSpacing: "-0.2px",
+                border: "1.5px solid rgba(255,255,255,0.08)",
+                marginBottom: 0,
+                justifyContent: "center",
+              }}
+            >
+              <span
                 style={{
                   flex: 1,
-                  padding: "0.7rem 1.1rem",
-                  borderRadius: 8,
-                  border: "1px solid #b6e0ff",
-                  fontSize: "1rem",
-                  outline: "none",
-                  background: "rgba(255,255,255,0.18)",
-                  color: "#fff",
-                  fontWeight: 500,
+                  animation: "wordFlashing 1.2s infinite linear alternate",
+                  display: "inline-block",
+                  textAlign: "center",
                 }}
-                disabled={formStatus === "success"}
-              />
-              <button
-                type="submit"
-                style={{
-                  background:
-                    "linear-gradient(90deg, #61dafb 0%, #b6e0ff 100%)",
-                  color: "#0a0a0f",
-                  border: "none",
-                  borderRadius: 8,
-                  padding: "0.7rem 1.5rem",
-                  fontWeight: 700,
-                  fontSize: "1rem",
-                  cursor: formStatus === "success" ? "not-allowed" : "pointer",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
-                  letterSpacing: "-0.2px",
-                  transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                  opacity: formStatus === "success" ? 0.6 : 1,
-                }}
-                disabled={formStatus === "success"}
               >
-                {formStatus === "success" ? "Joined!" : "Join Now"}
-              </button>
+                {searchReasoningTexts[searchReasoningIndex]}
+              </span>
             </div>
-            {formStatus === "success" && (
-              <div
-                style={{
-                  color: "#4caf50",
-                  marginTop: 10,
-                  fontWeight: 500,
-                  fontSize: "1.01rem",
-                  textAlign: "center",
-                }}
-              >
-                Thank you for joining! You'll receive early updates soon.
-              </div>
-            )}
-            {formStatus === "error" && (
-              <div
-                style={{
-                  color: "#ff5252",
-                  marginTop: 10,
-                  fontWeight: 500,
-                  fontSize: "1.01rem",
-                  textAlign: "center",
-                }}
-              >
-                Something went wrong. Please try again later.
-              </div>
-            )}
-          </form>
+            <style>{`
+              @keyframes wordFlashing {
+                0% { opacity: 0.4; }
+                50% { opacity: 1; }
+                100% { opacity: 0.4; }
+              }
+            `}</style>
+          </div>
+        )}
+        {searched && !searchLoading && (
           <div
             style={{
-              color: "#b6e0ff",
-              fontSize: "1.01rem",
-              textAlign: "center",
-              marginTop: 8,
+              marginTop: "1.5rem",
+              width: "100%",
+              maxWidth: "900px",
             }}
           >
-            Let's redefine how the world values knowledge.
+            {pagedResults.length === 0 ? (
+              <div
+                style={{
+                  color: "#bbb",
+                  fontStyle: "italic",
+                  padding: "1.5rem 0",
+                }}
+              >
+                No crafts found.
+              </div>
+            ) : (
+              <div>
+                <div
+                  className="ludi-craft-grid"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: 38,
+                    background: "none",
+                    padding: 0,
+                    minHeight: 420,
+                  }}
+                >
+                  {pagedResults.map((craft) => (
+                    <div
+                      key={craft.id}
+                      style={{
+                        width: "100%",
+                        aspectRatio: "1/1",
+                        cursor: "pointer",
+                        overflow: "hidden",
+                        borderRadius: 14,
+                        background: "none",
+                        boxShadow: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: 0,
+                        transition: "box-shadow 0.2s",
+                      }}
+                      onClick={() => {
+                        setFocusCraft(craft);
+                        setShowChat(true);
+                      }}
+                    >
+                      <img
+                        src={craft.image}
+                        alt={craft.name}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: 14,
+                          display: "block",
+                          background: "#222",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {/* Pagination controls */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 22,
+                    marginTop: 32,
+                  }}
+                >
+                  <button
+                    onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+                    disabled={page === 0}
+                    style={{
+                      background:
+                        page === 0 ? "#333" : "rgba(255,255,255,0.12)",
+                      color: page === 0 ? "#777" : "#fff",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      borderRadius: 10,
+                      padding: "0.7rem 1.5rem",
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                      cursor: page === 0 ? "not-allowed" : "pointer",
+                      boxShadow:
+                        page === 0 ? "none" : "0 1px 4px rgba(0,0,0,0.7)",
+                      transition:
+                        "background 0.2s, color 0.2s, box-shadow 0.2s",
+                      outline: "none",
+                    }}
+                    onMouseOver={(e) => {
+                      if (page !== 0)
+                        e.currentTarget.style.background =
+                          "rgba(255,255,255,0.22)";
+                    }}
+                    onMouseOut={(e) => {
+                      if (page !== 0)
+                        e.currentTarget.style.background =
+                          "rgba(255,255,255,0.12)";
+                    }}
+                  >
+                    Previous
+                  </button>
+                  <div
+                    style={{
+                      color: "#aaa",
+                      fontSize: "0.95rem",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Page {page + 1} of {totalPages}
+                  </div>
+                  <button
+                    onClick={() =>
+                      setPage((prev) => Math.min(totalPages - 1, prev + 1))
+                    }
+                    disabled={page === totalPages - 1}
+                    style={{
+                      background:
+                        page === totalPages - 1
+                          ? "#333"
+                          : "rgba(255,255,255,0.12)",
+                      color: page === totalPages - 1 ? "#777" : "#fff",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      borderRadius: 10,
+                      padding: "0.7rem 1.5rem",
+                      fontWeight: 600,
+                      fontSize: "0.95rem",
+                      cursor:
+                        page === totalPages - 1 ? "not-allowed" : "pointer",
+                      boxShadow:
+                        page === totalPages - 1
+                          ? "none"
+                          : "0 1px 4px rgba(0,0,0,0.7)",
+                      transition:
+                        "background 0.2s, color 0.2s, box-shadow 0.2s",
+                      outline: "none",
+                    }}
+                    onMouseOver={(e) => {
+                      if (page !== totalPages - 1)
+                        e.currentTarget.style.background =
+                          "rgba(255,255,255,0.22)";
+                    }}
+                    onMouseOut={(e) => {
+                      if (page !== totalPages - 1)
+                        e.currentTarget.style.background =
+                          "rgba(255,255,255,0.12)";
+                    }}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        {/* Join section at the bottom */}
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            margin: "2.5rem 0 2.5rem 0",
+          }}
+        >
+          <div
+            style={{
+              background: "rgba(255,255,255,0.10)",
+              borderRadius: 22,
+              boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
+              padding: "2rem 2rem 1.5rem 2rem",
+              maxWidth: 480,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <h2
+              style={{
+                color: "#b6e0ff",
+                fontWeight: 700,
+                fontSize: "1.35rem",
+                marginBottom: 18,
+                letterSpacing: "-0.5px",
+                textAlign: "center",
+              }}
+            >
+              Leave your email to be the first to know what's coming
+            </h2>
+            <form
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+                gap: 12,
+                marginBottom: 16,
+              }}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setFormStatus(null);
+                try {
+                  const formData = new FormData();
+                  formData.append("entry.1354930904", email);
+                  const response = await fetch(
+                    "https://docs.google.com/forms/d/e/1FAIpQLSdvzgrDpC2DMuyyk24XwcNYZNS8fuu7JyEykfI6F8dEeIENNw/formResponse",
+                    {
+                      method: "POST",
+                      mode: "no-cors",
+                      body: formData,
+                    }
+                  );
+                  setFormStatus("success");
+                  setEmail("");
+                } catch (err) {
+                  setFormStatus("error");
+                }
+              }}
+            >
+              <label htmlFor="ludi-email" style={{ display: "none" }}>
+                Email
+              </label>
+              <div style={{ display: "flex", width: "100%", gap: 8 }}>
+                <input
+                  id="ludi-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: "0.7rem 1.1rem",
+                    borderRadius: 8,
+                    border: "1px solid #b6e0ff",
+                    fontSize: "1rem",
+                    outline: "none",
+                    background: "rgba(255,255,255,0.18)",
+                    color: "#fff",
+                    fontWeight: 500,
+                  }}
+                  disabled={formStatus === "success"}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #61dafb 0%, #b6e0ff 100%)",
+                    color: "#0a0a0f",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: "0.7rem 1.5rem",
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                    cursor:
+                      formStatus === "success" ? "not-allowed" : "pointer",
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                    letterSpacing: "-0.2px",
+                    transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
+                    opacity: formStatus === "success" ? 0.6 : 1,
+                  }}
+                  disabled={formStatus === "success"}
+                >
+                  {formStatus === "success" ? "Joined!" : "Join Now"}
+                </button>
+              </div>
+              {formStatus === "success" && (
+                <div
+                  style={{
+                    color: "#4caf50",
+                    marginTop: 10,
+                    fontWeight: 500,
+                    fontSize: "1.01rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Thank you for joining! You'll receive early updates soon.
+                </div>
+              )}
+              {formStatus === "error" && (
+                <div
+                  style={{
+                    color: "#ff5252",
+                    marginTop: 10,
+                    fontWeight: 500,
+                    fontSize: "1.01rem",
+                    textAlign: "center",
+                  }}
+                >
+                  Something went wrong. Please try again later.
+                </div>
+              )}
+            </form>
+            <div
+              style={{
+                color: "#b6e0ff",
+                fontSize: "1.01rem",
+                textAlign: "center",
+                marginTop: 8,
+              }}
+            >
+              Let's redefine how the world values knowledge.
+            </div>
           </div>
         </div>
+        <footer
+          style={{
+            width: "100%",
+            textAlign: "center",
+            color: "#b6e0ff",
+            fontSize: "0.98rem",
+            marginTop: 24,
+            opacity: 0.85,
+          }}
+        >
+          ©️ 2025 useludi.org— All rights reserved.
+        </footer>
       </div>
-      <footer
-        style={{
-          width: "100%",
-          textAlign: "center",
-          color: "#b6e0ff",
-          fontSize: "0.98rem",
-          marginTop: 24,
-          opacity: 0.85,
-        }}
-      >
-        ©️ 2025 useludi.org— All rights reserved.
-      </footer>
-    </div>
+    </>
   );
 }
