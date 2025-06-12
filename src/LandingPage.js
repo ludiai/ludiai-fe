@@ -197,11 +197,16 @@ function ChatPanel({ craft, onClose, mobile }) {
         )}
       </div>
       <div
+        className="ludi-chat-input-row"
         style={{
           padding: "0.7rem 1.2rem",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           background: "rgba(255,255,255,0.04)",
           width: "100%",
+          display: "flex",
+          flexDirection: mobile ? "column" : "row",
+          alignItems: mobile ? "stretch" : "center",
+          gap: mobile ? 0 : 0,
         }}
       >
         <textarea
@@ -215,7 +220,7 @@ function ChatPanel({ craft, onClose, mobile }) {
           }}
           placeholder="Ask about materials, care, etc..."
           style={{
-            width: "75%",
+            width: mobile ? "100%" : "75%",
             minHeight: "38px",
             maxHeight: "120px",
             padding: "1.1rem 1.3rem",
@@ -229,13 +234,15 @@ function ChatPanel({ craft, onClose, mobile }) {
             outline: "none",
             fontFamily: "inherit",
             boxShadow: "none",
+            marginBottom: mobile ? "10px" : 0,
           }}
           disabled={loading}
         />
         <button
           onClick={handleSend}
           style={{
-            marginTop: "1rem",
+            marginTop: mobile ? 0 : "1rem",
+            marginLeft: mobile ? 0 : "1rem",
             background: loading
               ? "rgba(255,255,255,0.12)"
               : "rgba(255,255,255,0.12)",
@@ -248,6 +255,8 @@ function ChatPanel({ craft, onClose, mobile }) {
             cursor: loading ? "not-allowed" : "pointer",
             transition: "background 0.2s, color 0.2s",
             opacity: loading ? 0.7 : 1,
+            width: mobile ? "100%" : undefined,
+            alignSelf: mobile ? "stretch" : undefined,
           }}
           onMouseOver={(e) => {
             if (!loading)
@@ -822,6 +831,18 @@ export default function LandingPage() {
               font-size: 1.5rem !important;
               top: 8px !important;
               right: 10px !important;
+            }
+            .ludi-chat-input-row {
+              flex-direction: column !important;
+              align-items: stretch !important;
+              gap: 0 !important;
+            }
+            .ludi-chat-input-row button {
+              width: 100% !important;
+              margin-top: 0 !important;
+              height: 40px !important;
+              font-size: 1.1rem !important;
+              align-self: stretch !important;
             }
           }
         `}</style>
