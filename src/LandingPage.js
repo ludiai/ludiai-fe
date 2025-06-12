@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import apiService from "./services/apiService";
 import logo from "./logo.svg";
 
-function ChatPanel({ craft, onClose }) {
+function ChatPanel({ craft, onClose, mobile }) {
   const [messages, setMessages] = useState([
     { sender: "ai", text: `Hi! Ask me anything about \"${craft.name}\".` },
   ]);
@@ -404,6 +404,18 @@ export default function LandingPage() {
   const totalPages = Math.ceil(results.length / pageSize);
   const pagedResults = results.slice(page * pageSize, (page + 1) * pageSize);
 
+  // Responsive mobile state for focus view
+  const [isMobile, setIsMobile] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth <= 600 : false
+  );
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   React.useEffect(() => {
     let interval;
     if (searchLoading) {
@@ -448,24 +460,25 @@ export default function LandingPage() {
           background: "#000",
           color: "#fff",
           display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: isMobile ? "column" : "row",
+          alignItems: isMobile ? "stretch" : "center",
           justifyContent: "center",
           boxSizing: "border-box",
           position: "relative",
           padding: 0,
-          gap: 36,
+          gap: isMobile ? 0 : 36,
         }}
       >
         <div
           className="ludi-focus-card"
           style={{
-            width: CARD_WIDTH,
-            height: CARD_HEIGHT,
+            width: isMobile ? "100%" : CARD_WIDTH,
+            height: isMobile ? "auto" : CARD_HEIGHT,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            marginBottom: isMobile ? 10 : 0,
           }}
         >
           <div
@@ -567,22 +580,26 @@ export default function LandingPage() {
           </div>
         </div>
         {/* Divider */}
-        <div
-          style={{
-            height: CARD_HEIGHT,
-            width: 1,
-            background: "rgba(255,255,255,0.08)",
-            borderRadius: 2,
-            opacity: 0.13,
-            margin: "0 18px",
-          }}
-        />
+        {isMobile ? (
+          <div className="ludi-focus-divider" />
+        ) : (
+          <div
+            style={{
+              height: CARD_HEIGHT,
+              width: 1,
+              background: "rgba(255,255,255,0.08)",
+              borderRadius: 2,
+              opacity: 0.13,
+              margin: "0 18px",
+            }}
+          />
+        )}
         {showChat && (
           <div
             className="ludi-focus-chat"
             style={{
-              width: CARD_WIDTH,
-              height: CARD_HEIGHT,
+              width: isMobile ? "100%" : CARD_WIDTH,
+              height: isMobile ? "auto" : CARD_HEIGHT,
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -595,7 +612,7 @@ export default function LandingPage() {
                 borderRadius: 20,
                 boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
                 width: "100%",
-                height: "100%",
+                height: isMobile ? "auto" : "100%",
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
@@ -606,6 +623,7 @@ export default function LandingPage() {
               <ChatPanel
                 craft={focusCraft}
                 onClose={() => setShowChat(false)}
+                mobile={isMobile}
               />
             </div>
           </div>
@@ -750,8 +768,10 @@ export default function LandingPage() {
             .ludi-focus-row {
               flex-direction: column !important;
               align-items: stretch !important;
-              gap: 18px !important;
+              gap: 0 !important;
               padding: 0 0 24px 0 !important;
+              min-height: 0 !important;
+              height: auto !important;
             }
             .ludi-focus-card, .ludi-focus-chat {
               width: 100% !important;
@@ -763,9 +783,14 @@ export default function LandingPage() {
               border-radius: 16px !important;
               padding: 1.2rem 0.7rem 1.2rem 0.7rem !important;
             }
+            .ludi-focus-card {
+              margin-bottom: 10px !important;
+              box-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
+            }
             .ludi-focus-chat {
               min-width: 0 !important;
               min-height: 0 !important;
+              box-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
             }
             .ludi-focus-chat textarea {
               width: 100% !important;
@@ -777,6 +802,26 @@ export default function LandingPage() {
               margin-top: 10px !important;
               height: 40px !important;
               font-size: 1.1rem !important;
+            }
+            /* Divider between card and chat */
+            .ludi-focus-divider {
+              width: 100% !important;
+              height: 1.5px !important;
+              background: rgba(255,255,255,0.10) !important;
+              margin: 16px 0 !important;
+              border-radius: 2px !important;
+              opacity: 0.18 !important;
+              display: block !important;
+            }
+            /* ChatPanel header and close button */
+            .ludi-chat-header {
+              font-size: 1rem !important;
+              padding: 1rem 1rem 0.4rem 1rem !important;
+            }
+            .ludi-chat-close-btn {
+              font-size: 1.5rem !important;
+              top: 8px !important;
+              right: 10px !important;
             }
           }
         `}</style>
