@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { crafts } from "./data/crafts";
+import apiService from "./services/apiService";
 
 function ChatPanel({ craft, onClose }) {
   const [messages, setMessages] = useState([
@@ -28,22 +29,48 @@ function ChatPanel({ craft, onClose }) {
     return () => clearInterval(interval);
   }, [loading]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
+
+    // Add user message to chat
     setMessages([...messages, { sender: "user", text: input }]);
     setLoading(true);
-    // Placeholder AI response
-    setTimeout(() => {
+
+    try {
+      // Call OpenAI to answer the question about the craft
+      const response = await apiService.answerCraftQuestion(input, craft);
+
+      if (response.success) {
+        setMessages((msgs) => [
+          ...msgs,
+          {
+            sender: "ai",
+            text: response.data,
+          },
+        ]);
+      } else {
+        // Handle error by showing a message to the user
+        setMessages((msgs) => [
+          ...msgs,
+          {
+            sender: "ai",
+            text: "I'm sorry, I couldn't process your question. Please try again.",
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error getting AI response:", error);
       setMessages((msgs) => [
         ...msgs,
         {
           sender: "ai",
-          text: `I'm an AI. Here's some info about \"${craft.name}\"! (This is a placeholder response.)`,
+          text: "Sorry, there was an error processing your question. Please try again later.",
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 2600);
-    setInput("");
+      setInput("");
+    }
   };
 
   return (

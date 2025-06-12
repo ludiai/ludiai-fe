@@ -1,0 +1,278 @@
+.search-analyzer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  color: #333;
+  background-color: #ffffff;
+}
+
+.search-analyzer h2 {
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.search-analyzer p {
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.input-group {
+  display: flex;
+  margin: 20px 0;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #0044aa;
+}
+
+.input-group button {
+  padding: 10px 20px;
+  background-color: #0044aa;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.input-group button:hover {
+  background-color: #003388;
+}
+
+.input-group button:disabled {
+  background-color: #999999;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #c42b2b;
+  background-color: #f9f2f2;
+  padding: 12px 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+  border-left: 4px solid #d9534f;
+}
+
+.loading {
+  margin: 20px 0;
+  color: #444;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.analysis-results {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  overflow: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.analysis-results h3 {
+  color: #1a1a1a;
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.analysis-results pre {
+  white-space: pre-wrap;
+  font-family: monospace;
+  margin: 0;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 4px;
+  color: #333;
+}
+
+.instructions {
+  background-color: #e1f0ff;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 30px;
+}
+
+.instructions code {
+  background-color: #f0f0f0;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.extracted-keywords {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.extracted-keywords h4 {
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.keyword-tag {
+  background-color: #0044aa;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.formatted-query {
+  margin-top: 25px;
+}
+
+.formatted-query h4 {
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.query-box {
+  background-color: #f1f1f1;
+  padding: 12px 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+  margin-top: 12px;
+  word-break: break-word;
+  color: #333;
+}
+
+/* Related Queries Styles */
+.related-queries {
+  margin-top: 30px;
+  padding-top: 25px;
+  border-top: 1px solid #ddd;
+}
+
+.related-queries h4 {
+  color: #1a1a1a;
+  margin-bottom: 15px;
+}
+
+.query-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.related-query-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.related-query-item span {
+  font-size: 15px;
+  color: #333;
+  flex-grow: 1;
+}
+
+.use-query-btn {
+  background-color: #0044aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-left: 15px;
+}
+
+.use-query-btn:hover {
+  background-color: #003388;
+}
+
+.raw-json {
+  margin-top: 25px;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+}
+
+.raw-json summary {
+  cursor: pointer;
+  color: #0044aa;
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 10px;
+  user-select: none;
+  outline: none;
+}
+
+.raw-json summary:hover {
+  text-decoration: underline;
+}
+
+.raw-json summary:focus {
+  outline: 2px solid #0044aa;
+  outline-offset: 2px;
+}
+
+.raw-json pre {
+  margin-top: 15px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .search-analyzer {
+    padding: 15px;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .search-input {
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  .input-group button {
+    border-radius: 4px;
+    width: 100%;
+  }
+
+  .keyword-list {
+    gap: 8px;
+  }
+
+  .related-query-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .use-query-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}
