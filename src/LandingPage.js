@@ -4,9 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import apiService from "./services/apiService";
 import logo from "./logo.svg";
 
-function ChatPanel({ craft, onClose, mobile }) {
+function ChatPanel({ artisan, mobile }) {
   const [messages, setMessages] = useState([
-    { sender: "ai", text: `Hi! Ask me anything about \"${craft.name}\".` },
+    {
+      sender: "ai",
+      text: `Hi! Ask me anything about "${
+        artisan.artisan_profile?.name || "this artisan"
+      }".`,
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,9 +43,35 @@ function ChatPanel({ craft, onClose, mobile }) {
     setMessages([...messages, { sender: "user", text: input }]);
     setLoading(true);
 
+    // Combine user question, artisan profile, and craft details into a single string
+    const combinedContext = `Artisan Name: ${
+      artisan.artisan_profile?.name || "-"
+    }\nCity: ${artisan.artisan_profile?.location?.city || "-"}\nState: ${
+      artisan.artisan_profile?.location?.state || "-"
+    }\nCountry: ${artisan.artisan_profile?.location?.country || "-"}\nEmail: ${
+      artisan.artisan_profile?.contact?.email || "-"
+    }\nPhone: ${
+      artisan.artisan_profile?.contact?.phone || "-"
+    }\n\nCraft Category: ${
+      artisan.craft_details?.craft_category || "-"
+    }\nSubcategory: ${
+      artisan.craft_details?.subcategory || "-"
+    }\nCultural Heritage: ${
+      artisan.craft_details?.cultural_heritage || "-"
+    }\nPrimary Materials: ${
+      (artisan.craft_details?.primary_materials || []).join(", ") || "-"
+    }\nTechniques Used: ${
+      (artisan.craft_details?.techniques_used || []).join(", ") || "-"
+    }\nTools Used: ${
+      (artisan.craft_details?.tools_used || []).join(", ") || "-"
+    }
+    \n\n
+    Question: ${input}
+    `;
+
     try {
       // Call OpenAI to answer the question about the craft
-      const response = await apiService.answerCraftQuestion(input, craft);
+      const response = await apiService.answerCraftQuestion(combinedContext);
 
       if (response.success) {
         setMessages((msgs) => [
@@ -87,34 +118,6 @@ function ChatPanel({ craft, onClose, mobile }) {
         minWidth: 260,
       }}
     >
-      <button
-        onClick={onClose}
-        style={{
-          position: "absolute",
-          top: 12,
-          right: 16,
-          background: "none",
-          border: "none",
-          color: "#fff",
-          fontSize: 22,
-          cursor: "pointer",
-          zIndex: 2,
-        }}
-        title="Close chat"
-      >
-        ×
-      </button>
-      <div
-        style={{
-          padding: "1.2rem 1.2rem 0.5rem 1.2rem",
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
-          fontWeight: 600,
-          fontSize: "1.1rem",
-          color: "#fff",
-        }}
-      >
-        Ask AI about this craft
-      </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "1rem 1.2rem" }}>
         {messages.map((msg, idx) => (
           <div
@@ -392,14 +395,116 @@ function CraftLightbox({ craft, onClose }) {
   );
 }
 
+function ArtisanProfileCard({ artisan }) {
+  if (!artisan) return null;
+  const profile = artisan.artisan_profile || {};
+  const craft = artisan.craft_details || {};
+  const photo =
+    Array.isArray(craft.product_photos) && craft.product_photos.length > 0
+      ? craft.product_photos[0]
+      : null;
+
+  return (
+    <div
+      className="ludi-focus-card"
+      style={{
+        background: "rgba(255,255,255,0.04)",
+        borderRadius: 20,
+        boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        border: "1.5px solid rgba(255,255,255,0.08)",
+        padding: "2.2rem 1.5rem 2rem 1.5rem",
+        minWidth: 260,
+        maxWidth: 360,
+      }}
+    >
+      {photo && (
+        <img
+          src={photo}
+          alt={profile.name}
+          style={{
+            width: "100%",
+            maxWidth: 220,
+            height: 140,
+            objectFit: "cover",
+            borderRadius: 14,
+            marginBottom: 18,
+            boxShadow: "0 2px 12px rgba(0,0,0,0.7)",
+            background: "rgba(255,255,255,0.04)",
+          }}
+        />
+      )}
+      <div
+        style={{
+          fontWeight: 700,
+          fontSize: "1.25rem",
+          color: "#b6e0ff",
+          marginBottom: 6,
+        }}
+      >
+        {profile.name || "-"}
+      </div>
+      <div
+        style={{
+          color: "#fff",
+          fontWeight: 500,
+          fontSize: "1.05rem",
+          marginBottom: 6,
+        }}
+      >
+        {profile.location?.city || "-"}, {profile.location?.state || "-"},{" "}
+        {profile.location?.country || "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Category:</b> {craft.craft_category || "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Subcategory:</b> {craft.subcategory || "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Cultural Heritage:</b> {craft.cultural_heritage || "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Materials:</b>{" "}
+        {Array.isArray(craft.primary_materials) &&
+        craft.primary_materials.length > 0
+          ? craft.primary_materials.join(", ")
+          : "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Techniques:</b>{" "}
+        {Array.isArray(craft.techniques_used) &&
+        craft.techniques_used.length > 0
+          ? craft.techniques_used.join(", ")
+          : "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Tools:</b>{" "}
+        {Array.isArray(craft.tools_used) && craft.tools_used.length > 0
+          ? craft.tools_used.join(", ")
+          : "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+        <b>Email:</b> {profile.contact?.email || "-"}
+      </div>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem" }}>
+        <b>Phone:</b> {profile.contact?.phone || "-"}
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const [email, setEmail] = React.useState("");
   const [formStatus, setFormStatus] = React.useState(null); // null | 'success' | 'error'
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [searched, setSearched] = useState(false);
-  const [focusCraft, setFocusCraft] = useState(null);
-  const [showChat, setShowChat] = useState(true);
+  const [focusArtisan, setFocusArtisan] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchReasoningIndex, setSearchReasoningIndex] = useState(0);
   const searchReasoningTexts = [
@@ -440,9 +545,7 @@ export default function LandingPage() {
   const handleSearch = async () => {
     setSearchLoading(true);
     setSearched(false);
-    setFocusCraft(null);
-    setShowChat(true);
-    setPage(0);
+    setFocusArtisan(null);
     try {
       const response = await apiService.searchArtisans(query);
       if (response.success && Array.isArray(response.data?.artisans)) {
@@ -460,7 +563,7 @@ export default function LandingPage() {
   };
 
   // Focus mode UI from CraftSearch
-  if (focusCraft) {
+  if (focusArtisan) {
     const CARD_WIDTH = 360;
     const CARD_HEIGHT = 540;
     return (
@@ -481,16 +584,31 @@ export default function LandingPage() {
           gap: isMobile ? 0 : 36,
         }}
       >
+        {/* LEFT: Artisan info card */}
         <div
           className="ludi-focus-card"
           style={{
             width: isMobile ? "100%" : CARD_WIDTH,
             height: isMobile ? "auto" : CARD_HEIGHT,
+            marginBottom: isMobile ? 18 : 0,
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
             justifyContent: "center",
-            marginBottom: isMobile ? 10 : 0,
+            alignItems: "center",
+          }}
+        >
+          <ArtisanProfileCard artisan={focusArtisan} />
+        </div>
+        {/* RIGHT: Chat panel */}
+        <div
+          className="ludi-focus-chat"
+          style={{
+            width: isMobile ? "100%" : CARD_WIDTH,
+            height: isMobile ? "auto" : CARD_HEIGHT,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <div
@@ -498,177 +616,45 @@ export default function LandingPage() {
               background: "rgba(255,255,255,0.04)",
               borderRadius: 20,
               boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
-              padding: "2.2rem 2rem 2rem 2rem",
               width: "100%",
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              position: "relative",
-              border: "1.5px solid rgba(255,255,255,0.08)",
-              transition: "box-shadow 0.2s",
-            }}
-          >
-            <img
-              src={focusCraft.image}
-              alt={focusCraft.name}
-              style={{
-                width: "100%",
-                maxWidth: 220,
-                height: 150,
-                objectFit: "cover",
-                borderRadius: 14,
-                marginBottom: 24,
-                boxShadow: "0 2px 16px rgba(0,0,0,0.7)",
-                background: "rgba(255,255,255,0.04)",
-              }}
-            />
-            <div
-              style={{
-                fontWeight: 700,
-                fontSize: "1.35rem",
-                marginBottom: 8,
-                textAlign: "center",
-                letterSpacing: "-0.5px",
-                color: "#fff",
-                lineHeight: 1.2,
-              }}
-            >
-              {focusCraft.name}
-            </div>
-            <div
-              style={{
-                color: "#fff",
-                fontWeight: 500,
-                fontSize: "1.05rem",
-                marginBottom: 8,
-                textAlign: "center",
-                letterSpacing: "-0.2px",
-              }}
-            >
-              {focusCraft.creator} &middot; {focusCraft.location}
-            </div>
-            <div
-              style={{
-                color: "#fff",
-                fontSize: "1.05rem",
-                marginBottom: 24,
-                textAlign: "center",
-                lineHeight: 1.6,
-              }}
-            >
-              {focusCraft.description}
-            </div>
-            <div style={{ flex: 1 }} />
-            <button
-              onClick={() => {
-                setFocusCraft(null);
-              }}
-              style={{
-                background: "rgba(255,255,255,0.12)",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.18)",
-                borderRadius: 10,
-                padding: "0.7rem 1.5rem",
-                fontWeight: 600,
-                fontSize: "1rem",
-                cursor: "pointer",
-                marginTop: 8,
-                boxShadow: "0 1px 4px rgba(0,0,0,0.7)",
-                transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                outline: "none",
-                width: "100%",
-                letterSpacing: "-0.2px",
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.22)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.12)";
-              }}
-            >
-              ← Back
-            </button>
-          </div>
-        </div>
-        {/* Divider */}
-        {isMobile ? (
-          <div className="ludi-focus-divider" />
-        ) : (
-          <div
-            style={{
-              height: CARD_HEIGHT,
-              width: 1,
-              background: "rgba(255,255,255,0.08)",
-              borderRadius: 2,
-              opacity: 0.13,
-              margin: "0 18px",
-            }}
-          />
-        )}
-        {showChat && (
-          <div
-            className="ludi-focus-chat"
-            style={{
-              width: isMobile ? "100%" : CARD_WIDTH,
               height: isMobile ? "auto" : CARD_HEIGHT,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
+              position: "relative",
+              overflow: "hidden",
+              border: "1.5px solid rgba(255,255,255,0.08)",
             }}
           >
-            <div
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                borderRadius: 20,
-                boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
-                width: "100%",
-                height: isMobile ? "auto" : "100%",
-                display: "flex",
-                flexDirection: "column",
-                position: "relative",
-                overflow: "hidden",
-                border: "1.5px solid rgba(255,255,255,0.08)",
-              }}
-            >
-              <ChatPanel
-                craft={focusCraft}
-                onClose={() => setShowChat(false)}
-                mobile={isMobile}
-              />
-            </div>
+            <ChatPanel artisan={focusArtisan} mobile={isMobile} />
           </div>
-        )}
-        {!showChat && (
-          <button
-            onClick={() => setShowChat(true)}
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 32,
-              background: "rgba(255,255,255,0.12)",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.18)",
-              borderRadius: "12px 0 0 12px",
-              padding: "0.7rem 1.2rem",
-              fontWeight: 600,
-              fontSize: "1rem",
-              cursor: "pointer",
-              zIndex: 10,
-              boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
-              transition: "background 0.2s, color 0.2s",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.22)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "rgba(255,255,255,0.12)";
-            }}
-          >
-            AI Chat
-          </button>
-        )}
+        </div>
+        <button
+          onClick={() => setFocusArtisan(null)}
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 32,
+            background: "rgba(255,255,255,0.12)",
+            color: "#fff",
+            border: "1px solid rgba(255,255,255,0.18)",
+            borderRadius: "0 12px 12px 0",
+            padding: "0.7rem 1.2rem",
+            fontWeight: 600,
+            fontSize: "1rem",
+            cursor: "pointer",
+            zIndex: 10,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
+            transition: "background 0.2s, color 0.2s",
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = "rgba(255,255,255,0.22)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = "rgba(255,255,255,0.12)";
+          }}
+        >
+          ← Back
+        </button>
       </div>
     );
   }
@@ -1168,8 +1154,7 @@ export default function LandingPage() {
                             transition: "background 0.2s",
                           }}
                           onClick={() => {
-                            setFocusCraft(artisan);
-                            setShowChat(true);
+                            setFocusArtisan(artisan);
                           }}
                           onMouseOver={(e) =>
                             (e.currentTarget.style.background =

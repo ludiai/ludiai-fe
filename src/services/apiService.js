@@ -65,11 +65,10 @@ class ApiService {
   /**
    * Answers questions about a specific craft using backend endpoint
    *
-   * @param {string} question - The user's question about the craft
-   * @param {Object} craft - The craft item data including description as context
+   * @param {string} combinedContext - The user's question plus craft and artisan info as a single string
    * @returns {Promise<Object>} - Backend response about the craft
    */
-  async answerCraftQuestion(question, craft) {
+  async answerCraftQuestion(combinedContext) {
     try {
       const isLocalhost = window?.location?.hostname === "localhost";
       const backendDomain = isLocalhost
@@ -80,7 +79,7 @@ class ApiService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question, craft }),
+        body: JSON.stringify({ question: combinedContext }),
       });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
