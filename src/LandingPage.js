@@ -1019,12 +1019,32 @@ export default function LandingPage() {
             {pagedResults.length === 0 ? (
               <div
                 style={{
-                  color: "#bbb",
-                  fontStyle: "italic",
-                  padding: "1.5rem 0",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#b6e0ff",
+                  fontWeight: 600,
+                  fontSize: "1.25rem",
+                  padding: "2.5rem 0",
+                  opacity: 0.85,
+                  letterSpacing: "-0.5px",
+                  minHeight: 180,
+                  transition: "opacity 0.3s",
                 }}
               >
-                No artisans found.
+                <span style={{ fontSize: "2.5rem", marginBottom: 12 }}>🔍</span>
+                <span>No artisans found.</span>
+                <span
+                  style={{
+                    color: "#bbb",
+                    fontWeight: 400,
+                    fontSize: "1rem",
+                    marginTop: 8,
+                  }}
+                >
+                  Try a different search or check your spelling.
+                </span>
               </div>
             ) : (
               <div>
