@@ -415,7 +415,7 @@ function ArtisanProfileCard({ artisan }) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-start",
         border: "1.5px solid rgba(255,255,255,0.08)",
         padding: "2.2rem 1.5rem 2rem 1.5rem",
         minWidth: 260,
@@ -435,6 +435,7 @@ function ArtisanProfileCard({ artisan }) {
             marginBottom: 18,
             boxShadow: "0 2px 12px rgba(0,0,0,0.7)",
             background: "rgba(255,255,255,0.04)",
+            alignSelf: "center",
           }}
         />
       )}
@@ -444,6 +445,8 @@ function ArtisanProfileCard({ artisan }) {
           fontSize: "1.25rem",
           color: "#b6e0ff",
           marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
         }}
       >
         {profile.name || "-"}
@@ -454,46 +457,96 @@ function ArtisanProfileCard({ artisan }) {
           fontWeight: 500,
           fontSize: "1.05rem",
           marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
         }}
       >
         {profile.location?.city || "-"}, {profile.location?.state || "-"},{" "}
         {profile.location?.country || "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Category:</b> {craft.craft_category || "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Subcategory:</b> {craft.subcategory || "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Cultural Heritage:</b> {craft.cultural_heritage || "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Materials:</b>{" "}
         {Array.isArray(craft.primary_materials) &&
         craft.primary_materials.length > 0
           ? craft.primary_materials.join(", ")
           : "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Techniques:</b>{" "}
         {Array.isArray(craft.techniques_used) &&
         craft.techniques_used.length > 0
           ? craft.techniques_used.join(", ")
           : "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      <div
+        style={{
+          color: "#e0e0e0",
+          fontSize: "1.01rem",
+          marginBottom: 6,
+          textAlign: "left",
+          width: "100%",
+        }}
+      >
         <b>Tools:</b>{" "}
         {Array.isArray(craft.tools_used) && craft.tools_used.length > 0
           ? craft.tools_used.join(", ")
           : "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6 }}>
+      {/* <div style={{ color: "#e0e0e0", fontSize: "1.01rem", marginBottom: 6, textAlign: "left", width: "100%" }}>
         <b>Email:</b> {profile.contact?.email || "-"}
       </div>
-      <div style={{ color: "#e0e0e0", fontSize: "1.01rem" }}>
+      <div style={{ color: "#e0e0e0", fontSize: "1.01rem", textAlign: "left", width: "100%" }}>
         <b>Phone:</b> {profile.contact?.phone || "-"}
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -634,7 +687,7 @@ export default function LandingPage() {
             Find the crafts with{" "}
             <span
               style={{
-                background: "linear-gradient(90deg,#ffb199 0%,#ff0844 100%)",
+                background: "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -710,7 +763,7 @@ export default function LandingPage() {
               type="submit"
               style={{
                 marginLeft: 12,
-                background: "linear-gradient(90deg,#ffb199 0%,#ff0844 100%)",
+                background: "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
                 color: "#fff",
                 border: "none",
                 borderRadius: "50%",
@@ -1443,24 +1496,35 @@ export default function LandingPage() {
                                 cursor: "pointer",
                                 boxShadow: "0 1px 4px rgba(97,218,251,0.10)",
                                 transition:
-                                  "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s",
+                                  "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.13s",
                                 outline: "none",
+                                transform: "scale(1)",
                               }}
                               onMouseOver={(e) => {
                                 e.currentTarget.style.background =
                                   "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
+                                e.currentTarget.style.boxShadow =
+                                  "0 4px 16px 0 rgba(97,218,251,0.25)";
+                                e.currentTarget.style.transform = "scale(1.06)";
                               }}
                               onMouseOut={(e) => {
                                 e.currentTarget.style.background =
                                   "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
-                              }}
-                              onMouseDown={(e) => {
-                                e.currentTarget.style.transform = "scale(0.96)";
-                              }}
-                              onMouseUp={(e) => {
+                                e.currentTarget.style.boxShadow =
+                                  "0 1px 4px rgba(97,218,251,0.10)";
                                 e.currentTarget.style.transform = "scale(1)";
                               }}
+                              onMouseDown={(e) => {
+                                e.currentTarget.style.transform = "scale(0.97)";
+                              }}
+                              onMouseUp={(e) => {
+                                e.currentTarget.style.transform = "scale(1.06)";
+                              }}
                               onMouseLeave={(e) => {
+                                e.currentTarget.style.background =
+                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
+                                e.currentTarget.style.boxShadow =
+                                  "0 1px 4px rgba(97,218,251,0.10)";
                                 e.currentTarget.style.transform = "scale(1)";
                               }}
                             >
