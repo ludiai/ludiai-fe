@@ -1093,22 +1093,6 @@ export default function LandingPage() {
                             textAlign: "left",
                           }}
                         >
-                          Email
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Phone
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
                           Category
                         </th>
                         <th
@@ -1189,12 +1173,6 @@ export default function LandingPage() {
                         >
                           <td style={{ padding: "0.8rem 0.7rem" }}>
                             {artisan.artisan_profile?.name || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.artisan_profile?.contact?.email || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.artisan_profile?.contact?.phone || "-"}
                           </td>
                           <td style={{ padding: "0.8rem 0.7rem" }}>
                             {artisan.craft_details?.craft_category || "-"}
