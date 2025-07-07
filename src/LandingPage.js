@@ -652,7 +652,7 @@ export default function LandingPage() {
               opacity: 0.92,
             }}
           >
-            Find indigenous crafts by chatting with AI
+            Try it! It's magical!
           </div>
         </div>
         <div
@@ -1222,7 +1222,7 @@ export default function LandingPage() {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#b6e0ff",
+                  color: "black",
                   fontWeight: 600,
                   fontSize: "1.25rem",
                   padding: "2.5rem 0",
@@ -1236,7 +1236,7 @@ export default function LandingPage() {
                 <span>No artisans found.</span>
                 <span
                   style={{
-                    color: "#bbb",
+                    color: "black",
                     fontWeight: 400,
                     fontSize: "1rem",
                     marginTop: 8,
@@ -1521,7 +1521,7 @@ export default function LandingPage() {
                   </button>
                   <div
                     style={{
-                      color: "#aaa",
+                      color: "black",
                       fontSize: "0.95rem",
                       fontWeight: 500,
                     }}
@@ -1606,7 +1606,7 @@ export default function LandingPage() {
                 textAlign: "center",
               }}
             >
-              Leave your email to be the first to know what's coming
+              Be the first to know what's coming
             </h2>
             <form
               style={{
