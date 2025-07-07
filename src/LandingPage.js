@@ -199,12 +199,12 @@ function ChatPanel({ craft, onClose, mobile }) {
       <div
         className="ludi-chat-input-row"
         style={{
-          padding: "0.7rem 1.2rem",
+          padding: "1.2rem 0",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           background: "rgba(255,255,255,0.04)",
           width: "100%",
           display: "flex",
-          flexDirection: mobile ? "column" : "row",
+          flexDirection: "column",
           alignItems: mobile ? "stretch" : "center",
           gap: mobile ? 0 : 0,
         }}
@@ -241,8 +241,8 @@ function ChatPanel({ craft, onClose, mobile }) {
         <button
           onClick={handleSend}
           style={{
-            marginTop: mobile ? 0 : "1rem",
-            marginLeft: mobile ? 0 : "1rem",
+            marginTop: mobile ? "0" : "1rem",
+            marginLeft: mobile ? "0" : "1rem",
             background: loading
               ? "rgba(255,255,255,0.12)"
               : "rgba(255,255,255,0.12)",

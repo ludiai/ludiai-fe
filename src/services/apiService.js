@@ -1,4 +1,5 @@
 import openAIService from "./openaiService";
+import { BACKEND_DOMAIN_LOCALHOST, BACKEND_DOMAIN_PROD } from "./constants";
 
 /**
  * API service for application-wide functionality
@@ -62,18 +63,32 @@ class ApiService {
   }
 
   /**
-   * Answers questions about a specific craft using OpenAI
+   * Answers questions about a specific craft using backend endpoint
    *
    * @param {string} question - The user's question about the craft
    * @param {Object} craft - The craft item data including description as context
-   * @returns {Promise<Object>} - AI response about the craft
+   * @returns {Promise<Object>} - Backend response about the craft
    */
   async answerCraftQuestion(question, craft) {
     try {
-      const answer = await openAIService.answerCraftQuestion(question, craft);
+      const isLocalhost = window?.location?.hostname === "localhost";
+      const backendDomain = isLocalhost
+        ? BACKEND_DOMAIN_LOCALHOST
+        : BACKEND_DOMAIN_PROD;
+      const response = await fetch(`${backendDomain}/ludi/answer-craft`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question, craft }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const answer = await response.json();
       return {
         success: true,
-        data: answer,
+        data: answer?.answer,
         message: "Craft question answered successfully",
       };
     } catch (error) {
