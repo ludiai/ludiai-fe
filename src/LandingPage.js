@@ -437,23 +437,26 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, [searchLoading]);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setSearchLoading(true);
-    // You can add filtering logic here if needed
-    // Shuffle crafts array
-    const shuffled = crafts.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    setTimeout(() => {
-      setResults(shuffled);
+    setSearched(false);
+    setFocusCraft(null);
+    setShowChat(true);
+    setPage(0);
+    try {
+      const response = await apiService.searchArtisans(query);
+      if (response.success && Array.isArray(response.data?.artisans)) {
+        setResults(response.data.artisans);
+      } else {
+        setResults([]);
+      }
       setSearched(true);
-      setFocusCraft(null);
-      setShowChat(true);
-      setPage(0);
+    } catch (error) {
+      setResults([]);
+      setSearched(true);
+    } finally {
       setSearchLoading(false);
-    }, 2000);
+    }
   };
 
   // Focus mode UI from CraftSearch
@@ -1020,7 +1023,11 @@ export default function LandingPage() {
             style={{
               marginTop: "1.5rem",
               width: "100%",
-              maxWidth: "900px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              paddingLeft: 24,
+              paddingRight: 24,
+              boxSizing: "border-box",
             }}
           >
             {pagedResults.length === 0 ? (
@@ -1031,57 +1038,204 @@ export default function LandingPage() {
                   padding: "1.5rem 0",
                 }}
               >
-                No crafts found.
+                No artisans found.
               </div>
             ) : (
               <div>
                 <div
-                  className="ludi-craft-grid"
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: 38,
-                    background: "none",
-                    padding: 0,
-                    minHeight: 420,
+                    width: "100%",
+                    overflowX: "auto",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    boxSizing: "border-box",
+                    paddingLeft: 8,
+                    paddingRight: 8,
                   }}
                 >
-                  {pagedResults.map((craft) => (
-                    <div
-                      key={craft.id}
-                      style={{
-                        width: "100%",
-                        aspectRatio: "1/1",
-                        cursor: "pointer",
-                        overflow: "hidden",
-                        borderRadius: 14,
-                        background: "none",
-                        boxShadow: "none",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 0,
-                        transition: "box-shadow 0.2s",
-                      }}
-                      onClick={() => {
-                        setFocusCraft(craft);
-                        setShowChat(true);
-                      }}
-                    >
-                      <img
-                        src={craft.image}
-                        alt={craft.name}
+                  <table
+                    style={{
+                      minWidth: 900,
+                      width: "100%",
+                      background: "rgba(255,255,255,0.02)",
+                      borderRadius: 12,
+                      overflow: "hidden",
+                      color: "#fff",
+                      fontSize: "1.05rem",
+                      borderCollapse: "collapse",
+                      boxShadow: "0 2px 16px rgba(0,0,0,0.18)",
+                    }}
+                  >
+                    <thead>
+                      <tr
                         style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: 14,
-                          display: "block",
-                          background: "#222",
+                          background: "rgba(255,255,255,0.06)",
+                          fontWeight: 700,
                         }}
-                      />
-                    </div>
-                  ))}
+                      >
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Name
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Email
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Phone
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Category
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Subcategory
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Cultural Heritage
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Primary Materials
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Techniques Used
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Tools Used
+                        </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          Product Photos
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pagedResults.map((artisan, idx) => (
+                        <tr
+                          key={idx}
+                          style={{
+                            cursor: "pointer",
+                            background:
+                              idx % 2 === 0
+                                ? "rgba(255,255,255,0.03)"
+                                : "rgba(255,255,255,0.01)",
+                            transition: "background 0.2s",
+                          }}
+                          onClick={() => {
+                            setFocusCraft(artisan);
+                            setShowChat(true);
+                          }}
+                          onMouseOver={(e) =>
+                            (e.currentTarget.style.background =
+                              "rgba(102,204,255,0.10)")
+                          }
+                          onMouseOut={(e) =>
+                            (e.currentTarget.style.background =
+                              idx % 2 === 0
+                                ? "rgba(255,255,255,0.03)"
+                                : "rgba(255,255,255,0.01)")
+                          }
+                        >
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.artisan_profile?.name || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.artisan_profile?.contact?.email || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.artisan_profile?.contact?.phone || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.craft_details?.craft_category || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.craft_details?.subcategory || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {artisan.craft_details?.cultural_heritage || "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {Array.isArray(
+                              artisan.craft_details?.primary_materials
+                            ) &&
+                            artisan.craft_details.primary_materials.length > 0
+                              ? artisan.craft_details.primary_materials.join(
+                                  ", "
+                                )
+                              : "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {Array.isArray(
+                              artisan.craft_details?.techniques_used
+                            ) &&
+                            artisan.craft_details.techniques_used.length > 0
+                              ? artisan.craft_details.techniques_used.join(", ")
+                              : "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {Array.isArray(artisan.craft_details?.tools_used) &&
+                            artisan.craft_details.tools_used.length > 0
+                              ? artisan.craft_details.tools_used.join(", ")
+                              : "-"}
+                          </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            {Array.isArray(
+                              artisan.craft_details?.product_photos
+                            ) && artisan.craft_details.product_photos.length > 0
+                              ? artisan.craft_details.product_photos.length +
+                                " photo(s)"
+                              : "-"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
                 {/* Pagination controls */}
                 <div

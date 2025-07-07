@@ -104,6 +104,44 @@ class ApiService {
       };
     }
   }
+
+  /**
+   * Searches artisans using the backend /ludi/search-artisans endpoint
+   *
+   * @param {string} searchQuery - The user's search query
+   * @returns {Promise<Object>} - Backend response with artisan search results
+   */
+  async searchArtisans(searchQuery) {
+    try {
+      const isLocalhost = window?.location?.hostname === "localhost";
+      const backendDomain = isLocalhost
+        ? BACKEND_DOMAIN_LOCALHOST
+        : BACKEND_DOMAIN_PROD;
+      const response = await fetch(`${backendDomain}/ludi/search-artisans`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: searchQuery }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      return {
+        success: true,
+        data: result,
+        message: "Artisan search completed successfully",
+      };
+    } catch (error) {
+      console.error("Error in API service while searching artisans:", error);
+      return {
+        success: false,
+        error: error.message || "Failed to search artisans",
+        message: "An error occurred while searching for artisans",
+      };
+    }
+  }
 }
 
 // Export a singleton instance
