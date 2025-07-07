@@ -408,7 +408,7 @@ function ArtisanProfileCard({ artisan }) {
     <div
       className="ludi-focus-card"
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: "#18181b",
         borderRadius: 20,
         boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
         width: "100%",
@@ -498,6 +498,35 @@ function ArtisanProfileCard({ artisan }) {
   );
 }
 
+// Typing animation hook for input placeholder
+function useTypingPlaceholder(examples, speed = 60, pause = 1200) {
+  const [displayed, setDisplayed] = React.useState("");
+  const [exampleIdx, setExampleIdx] = React.useState(0);
+  const [charIdx, setCharIdx] = React.useState(0);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  React.useEffect(() => {
+    let timeout;
+    const current = examples[exampleIdx];
+    if (!isDeleting && charIdx < current.length) {
+      timeout = setTimeout(() => setCharIdx(charIdx + 1), speed);
+    } else if (!isDeleting && charIdx === current.length) {
+      timeout = setTimeout(() => setIsDeleting(true), pause);
+    } else if (isDeleting && charIdx > 0) {
+      timeout = setTimeout(() => setCharIdx(charIdx - 1), speed / 2);
+    } else if (isDeleting && charIdx === 0) {
+      timeout = setTimeout(() => {
+        setIsDeleting(false);
+        setExampleIdx((i) => (i + 1) % examples.length);
+      }, 400);
+    }
+    setDisplayed(current.slice(0, charIdx) + (charIdx > 0 ? "|" : ""));
+    return () => clearTimeout(timeout);
+  }, [charIdx, isDeleting, exampleIdx, examples, speed, pause]);
+
+  return displayed;
+}
+
 export default function LandingPage() {
   const [email, setEmail] = React.useState("");
   const [formStatus, setFormStatus] = React.useState(null); // null | 'success' | 'error'
@@ -507,11 +536,22 @@ export default function LandingPage() {
   const [focusArtisan, setFocusArtisan] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchReasoningIndex, setSearchReasoningIndex] = useState(0);
+  const [showSearch, setShowSearch] = useState(false);
+  const examplePrompts = [
+    "Ask Ludi to find a handwoven basket",
+    "Find a ceramic artist near me",
+    "Show me eco-friendly crafts",
+    "Discover unique textile art",
+    "Who makes wooden toys?",
+    "Find a glassblower in my city",
+    "Show me traditional jewelry makers",
+  ];
   const searchReasoningTexts = [
     "Searching for the perfect crafts…",
     "Stitching together your results…",
     "Almost ready with your crafts…",
   ];
+  const typingPlaceholder = useTypingPlaceholder(examplePrompts);
   // Pagination state (only one set)
   const [page, setPage] = useState(0);
   const pageSize = 6;
@@ -562,6 +602,163 @@ export default function LandingPage() {
     }
   };
 
+  // Show hero until user submits a query
+  if (!showSearch) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          width: "100vw",
+          background:
+            "radial-gradient(circle at 50% 70%, #ffb199 0%, #283e51 100%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <h1
+            style={{
+              fontWeight: 900,
+              fontSize: "2.8rem",
+              letterSpacing: "-1.5px",
+              color: "#fff",
+              marginBottom: 12,
+              lineHeight: 1.1,
+              textShadow: "0 2px 24px rgba(0,0,0,0.18)",
+            }}
+          >
+            Find the crafts with{" "}
+            <span
+              style={{
+                background: "linear-gradient(90deg,#ffb199 0%,#ff0844 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Ludi
+            </span>
+          </h1>
+          <div
+            style={{
+              color: "#eaf6ff",
+              fontWeight: 500,
+              fontSize: "1.25rem",
+              letterSpacing: "-0.5px",
+              marginBottom: 18,
+              opacity: 0.92,
+            }}
+          >
+            Find indigenous crafts by chatting with AI
+          </div>
+        </div>
+        <div
+          style={{
+            background: "rgba(20,20,22,0.92)",
+            borderRadius: 28,
+            boxShadow: "0 8px 48px 0 rgba(0,0,0,0.45)",
+            padding: "2.2rem 2.5rem 2rem 2.5rem",
+            maxWidth: 600,
+            width: "90vw",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "0 auto",
+            position: "relative",
+          }}
+        >
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (query.trim()) {
+                setShowSearch(true);
+                handleSearch();
+              }
+            }}
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: 0,
+            }}
+          >
+            <input
+              type="text"
+              placeholder={typingPlaceholder}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{
+                width: "100%",
+                fontSize: "1.18rem",
+                padding: "1.1rem 1.3rem",
+                borderRadius: 16,
+                border: "none",
+                background: "rgba(255,255,255,0.07)",
+                color: "#fff",
+                outline: "none",
+                fontWeight: 500,
+                boxShadow: "none",
+                marginRight: 0,
+                letterSpacing: "-0.2px",
+              }}
+              autoFocus
+            />
+            <button
+              type="submit"
+              style={{
+                marginLeft: 12,
+                background: "linear-gradient(90deg,#ffb199 0%,#ff0844 100%)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "50%",
+                width: 48,
+                height: 48,
+                cursor: "pointer",
+                fontSize: "1.7rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.7)",
+                transition: "background 0.2s, color 0.2s, transform 0.1s",
+              }}
+              aria-label="Search"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 11H16M16 11L12.5 7.5M16 11L12.5 14.5"
+                  stroke="#fff"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </form>
+          {/* <div
+            style={{
+              marginTop: 18,
+              color: "#b6e0ff",
+              fontSize: "1.01rem",
+              textAlign: "center",
+              opacity: 0.7,
+            }}
+          >
+            <span style={{ fontWeight: 500 }}>+ Public</span>
+          </div> */}
+        </div>
+      </div>
+    );
+  }
+
   // Focus mode UI from CraftSearch
   if (focusArtisan) {
     const CARD_WIDTH = 360;
@@ -572,7 +769,8 @@ export default function LandingPage() {
         style={{
           minHeight: "100vh",
           width: "100vw",
-          background: "#000",
+          background:
+            "radial-gradient(circle at 50% 70%, #ffb199 0%, #283e51 100%)",
           color: "#fff",
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
@@ -613,7 +811,7 @@ export default function LandingPage() {
         >
           <div
             style={{
-              background: "rgba(255,255,255,0.04)",
+              background: "#18181b",
               borderRadius: 20,
               boxShadow: "0 6px 32px rgba(0,0,0,0.7)",
               width: "100%",
@@ -713,7 +911,8 @@ export default function LandingPage() {
         style={{
           minHeight: "100vh",
           width: "100vw",
-          background: "#0a0a0f",
+          background:
+            "radial-gradient(circle at 50% 70%, #ffb199 0%, #283e51 100%)",
           color: "#eaf6ff",
           display: "flex",
           flexDirection: "column",
@@ -1063,20 +1262,24 @@ export default function LandingPage() {
                     style={{
                       minWidth: 900,
                       width: "100%",
-                      background: "rgba(255,255,255,0.02)",
-                      borderRadius: 12,
+                      background: "rgba(20,20,30,0.85)",
+                      backdropFilter: "blur(6px)",
+                      borderRadius: 18,
                       overflow: "hidden",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
                       color: "#fff",
                       fontSize: "1.05rem",
                       borderCollapse: "collapse",
-                      boxShadow: "0 2px 16px rgba(0,0,0,0.18)",
                     }}
                   >
                     <thead>
                       <tr
                         style={{
-                          background: "rgba(255,255,255,0.06)",
-                          fontWeight: 700,
+                          background: "rgba(255,255,255,0.08)",
+                          fontWeight: 800,
+                          letterSpacing: "-0.5px",
+                          fontSize: "1.08rem",
+                          textShadow: "0 1px 8px rgba(0,0,0,0.10)",
                         }}
                       >
                         <th
@@ -1143,6 +1346,14 @@ export default function LandingPage() {
                         >
                           Product Photos
                         </th>
+                        <th
+                          style={{
+                            padding: "0.9rem 0.7rem",
+                            textAlign: "left",
+                          }}
+                        >
+                          AI
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1150,26 +1361,25 @@ export default function LandingPage() {
                         <tr
                           key={idx}
                           style={{
-                            cursor: "pointer",
                             background:
                               idx % 2 === 0
                                 ? "rgba(255,255,255,0.03)"
                                 : "rgba(255,255,255,0.01)",
-                            transition: "background 0.2s",
+                            transition: "background 0.2s, box-shadow 0.2s",
                           }}
-                          onClick={() => {
-                            setFocusArtisan(artisan);
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.background =
+                              "rgba(102,204,255,0.10)";
+                            e.currentTarget.style.boxShadow =
+                              "0 2px 12px rgba(102,204,255,0.10)";
                           }}
-                          onMouseOver={(e) =>
-                            (e.currentTarget.style.background =
-                              "rgba(102,204,255,0.10)")
-                          }
-                          onMouseOut={(e) =>
-                            (e.currentTarget.style.background =
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.background =
                               idx % 2 === 0
                                 ? "rgba(255,255,255,0.03)"
-                                : "rgba(255,255,255,0.01)")
-                          }
+                                : "rgba(255,255,255,0.01)";
+                            e.currentTarget.style.boxShadow = "none";
+                          }}
                         >
                           <td style={{ padding: "0.8rem 0.7rem" }}>
                             {artisan.artisan_profile?.name || "-"}
@@ -1215,6 +1425,48 @@ export default function LandingPage() {
                                 " photo(s)"
                               : "-"}
                           </td>
+                          <td style={{ padding: "0.8rem 0.7rem" }}>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFocusArtisan(artisan);
+                              }}
+                              style={{
+                                background:
+                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
+                                color: "#0a0a0f",
+                                border: "none",
+                                borderRadius: 10,
+                                padding: "0.5rem 1.1rem",
+                                fontWeight: 700,
+                                fontSize: "1rem",
+                                cursor: "pointer",
+                                boxShadow: "0 1px 4px rgba(97,218,251,0.10)",
+                                transition:
+                                  "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s",
+                                outline: "none",
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.background =
+                                  "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.background =
+                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
+                              }}
+                              onMouseDown={(e) => {
+                                e.currentTarget.style.transform = "scale(0.96)";
+                              }}
+                              onMouseUp={(e) => {
+                                e.currentTarget.style.transform = "scale(1)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = "scale(1)";
+                              }}
+                            >
+                              Chat
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -1235,29 +1487,34 @@ export default function LandingPage() {
                     disabled={page === 0}
                     style={{
                       background:
-                        page === 0 ? "#333" : "rgba(255,255,255,0.12)",
-                      color: page === 0 ? "#777" : "#fff",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      borderRadius: 10,
-                      padding: "0.7rem 1.5rem",
-                      fontWeight: 600,
-                      fontSize: "0.95rem",
+                        page === 0
+                          ? "linear-gradient(90deg,#23242a 0%,#23242a 100%)"
+                          : "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
+                      color: page === 0 ? "#888" : "#0a0a0f",
+                      border: "none",
+                      borderRadius: 18,
+                      padding: "0.7rem 1.7rem",
+                      fontWeight: 700,
+                      fontSize: "1.05rem",
                       cursor: page === 0 ? "not-allowed" : "pointer",
                       boxShadow:
-                        page === 0 ? "none" : "0 1px 4px rgba(0,0,0,0.7)",
+                        page === 0
+                          ? "none"
+                          : "0 2px 12px rgba(97,218,251,0.10)",
                       transition:
-                        "background 0.2s, color 0.2s, box-shadow 0.2s",
+                        "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s",
                       outline: "none",
+                      opacity: page === 0 ? 0.6 : 1,
                     }}
                     onMouseOver={(e) => {
                       if (page !== 0)
                         e.currentTarget.style.background =
-                          "rgba(255,255,255,0.22)";
+                          "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
                     }}
                     onMouseOut={(e) => {
                       if (page !== 0)
                         e.currentTarget.style.background =
-                          "rgba(255,255,255,0.12)";
+                          "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
                     }}
                   >
                     Previous
@@ -1279,33 +1536,34 @@ export default function LandingPage() {
                     style={{
                       background:
                         page === totalPages - 1
-                          ? "#333"
-                          : "rgba(255,255,255,0.12)",
-                      color: page === totalPages - 1 ? "#777" : "#fff",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      borderRadius: 10,
-                      padding: "0.7rem 1.5rem",
-                      fontWeight: 600,
-                      fontSize: "0.95rem",
+                          ? "linear-gradient(90deg,#23242a 0%,#23242a 100%)"
+                          : "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
+                      color: page === totalPages - 1 ? "#888" : "#0a0a0f",
+                      border: "none",
+                      borderRadius: 18,
+                      padding: "0.7rem 1.7rem",
+                      fontWeight: 700,
+                      fontSize: "1.05rem",
                       cursor:
                         page === totalPages - 1 ? "not-allowed" : "pointer",
                       boxShadow:
                         page === totalPages - 1
                           ? "none"
-                          : "0 1px 4px rgba(0,0,0,0.7)",
+                          : "0 2px 12px rgba(97,218,251,0.10)",
                       transition:
-                        "background 0.2s, color 0.2s, box-shadow 0.2s",
+                        "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s",
                       outline: "none",
+                      opacity: page === totalPages - 1 ? 0.6 : 1,
                     }}
                     onMouseOver={(e) => {
                       if (page !== totalPages - 1)
                         e.currentTarget.style.background =
-                          "rgba(255,255,255,0.22)";
+                          "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
                     }}
                     onMouseOut={(e) => {
                       if (page !== totalPages - 1)
                         e.currentTarget.style.background =
-                          "rgba(255,255,255,0.12)";
+                          "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
                     }}
                   >
                     Next
@@ -1326,15 +1584,16 @@ export default function LandingPage() {
         >
           <div
             style={{
-              background: "rgba(255,255,255,0.10)",
-              borderRadius: 22,
-              boxShadow: "0 4px 32px rgba(0,0,0,0.18)",
-              padding: "2rem 2rem 1.5rem 2rem",
+              background: "rgba(20,20,30,0.97)",
+              borderRadius: 28,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+              padding: "2.2rem 2.5rem 2rem 2.5rem",
               maxWidth: 480,
               width: "100%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              color: "#fff",
             }}
           >
             <h2
@@ -1393,12 +1652,12 @@ export default function LandingPage() {
                   style={{
                     flex: 1,
                     padding: "0.7rem 1.1rem",
-                    borderRadius: 8,
-                    border: "1px solid #b6e0ff",
-                    fontSize: "1rem",
+                    borderRadius: 10,
+                    border: "2px solid #0099ff",
+                    fontSize: "1.08rem",
                     outline: "none",
-                    background: "rgba(255,255,255,0.18)",
-                    color: "#fff",
+                    background: "#fff",
+                    color: "#222",
                     fontWeight: 500,
                   }}
                   disabled={formStatus === "success"}
@@ -1407,19 +1666,24 @@ export default function LandingPage() {
                   type="submit"
                   style={{
                     background:
-                      "linear-gradient(90deg, #61dafb 0%, #b6e0ff 100%)",
-                    color: "#0a0a0f",
+                      formStatus === "success"
+                        ? "#e0e0e0"
+                        : "linear-gradient(90deg,#0099ff 0%,#61dafb 100%)",
+                    color: formStatus === "success" ? "#888" : "#fff",
                     border: "none",
-                    borderRadius: 8,
-                    padding: "0.7rem 1.5rem",
+                    borderRadius: 14,
+                    padding: "0.7rem 1.7rem",
                     fontWeight: 700,
-                    fontSize: "1rem",
+                    fontSize: "1.08rem",
                     cursor:
                       formStatus === "success" ? "not-allowed" : "pointer",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.07)",
+                    boxShadow:
+                      formStatus === "success"
+                        ? "none"
+                        : "0 2px 12px rgba(0,153,255,0.10)",
                     letterSpacing: "-0.2px",
                     transition: "background 0.2s, color 0.2s, box-shadow 0.2s",
-                    opacity: formStatus === "success" ? 0.6 : 1,
+                    opacity: formStatus === "success" ? 0.7 : 1,
                   }}
                   disabled={formStatus === "success"}
                 >
