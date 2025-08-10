@@ -395,6 +395,355 @@ function CraftLightbox({ craft, onClose }) {
   );
 }
 
+// Utility function to convert Google Drive sharing links to direct image URLs
+function getDirectImageUrl(url) {
+  if (url.includes("drive.google.com")) {
+    // Extract file ID from Google Drive sharing URL
+    const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+    if (match) {
+      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+  }
+  return url;
+}
+
+function ArtisanSearchCard({ artisan, onChatClick }) {
+  const profile = artisan.artisan_profile || {};
+  const craft = artisan.craft_details || {};
+  const photos = craft.product_photos || [];
+
+  return (
+    <div
+      style={{
+        background: "rgba(20,20,30,0.85)",
+        backdropFilter: "blur(6px)",
+        borderRadius: 16,
+        overflow: "hidden",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
+        color: "#fff",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+        border: "1px solid rgba(255,255,255,0.08)",
+        height: "480px", // Fixed height for consistency
+        display: "flex",
+        flexDirection: "column",
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px)";
+        e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.25)";
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.18)";
+      }}
+    >
+      {/* Product Photos */}
+      {photos.length > 0 ? (
+        <div
+          style={{
+            position: "relative",
+            display: "flex",
+            height: "200px",
+            overflow: "hidden",
+            background: "rgba(255,255,255,0.04)",
+            flexShrink: 0, // Prevent shrinking
+          }}
+        >
+          {photos.slice(0, 3).map((photo, index) => (
+            <div
+              key={index}
+              style={{
+                flex: 1,
+                position: "relative",
+                overflow: "hidden",
+                cursor: "pointer",
+              }}
+            >
+              <img
+                src={getDirectImageUrl(photo)}
+                alt={`Product ${index + 1}`}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  opacity: 0,
+                  transition: "opacity 0.3s ease, transform 0.3s ease",
+                }}
+                onError={(e) => {
+                  e.target.style.display = "none";
+                }}
+                onLoad={(e) => {
+                  e.target.style.opacity = "1";
+                }}
+              />
+            </div>
+          ))}
+          {photos.length > 3 && (
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0,
+                background: "rgba(0, 0, 0, 0.7)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "white",
+                fontWeight: 600,
+                fontSize: "1.1rem",
+              }}
+            >
+              <span>+{photos.length - 3} more</span>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          style={{
+            height: "200px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(255,255,255,0.04)",
+            flexShrink: 0, // Prevent shrinking
+          }}
+        >
+          <div style={{ textAlign: "center", color: "#999" }}>
+            <span
+              style={{
+                fontSize: "2rem",
+                display: "block",
+                marginBottom: "8px",
+              }}
+            >
+              📷
+            </span>
+            <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 500 }}>
+              No photos available
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Artisan Info - Flex container for content */}
+      <div 
+        style={{ 
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1, // Take remaining space
+          minHeight: 0, // Allow shrinking
+        }}
+      >
+        {/* Header Section */}
+        <div style={{ marginBottom: "20px", flexShrink: 0 }}>
+          <h5
+            style={{
+              color: "#b6e0ff",
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              margin: "0 0 8px 0",
+              lineHeight: 1.3,
+            }}
+          >
+            {profile.name || "Unknown Artisan"}
+          </h5>
+          <p
+            style={{
+              color: "#e0e0e0",
+              fontSize: "1rem",
+              margin: "0 0 12px 0",
+              fontWeight: 500,
+            }}
+          >
+            {[
+              profile.location?.city,
+              profile.location?.state,
+              profile.location?.country,
+            ]
+              .filter(Boolean)
+              .join(", ") || "Location not specified"}
+          </p>
+        </div>
+
+        {/* Content Section - Scrollable if needed */}
+        <div 
+          className="artisan-card-content"
+          style={{ 
+            flex: 1,
+            overflowY: "auto",
+            marginBottom: "16px",
+            paddingRight: "4px", // Space for scrollbar
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(182, 224, 255, 0.3) transparent",
+            borderTop: "1px solid rgba(182, 224, 255, 0.1)",
+            paddingTop: "16px",
+          }}
+        >
+          <style>{`
+            .artisan-card-content::-webkit-scrollbar {
+              width: 6px;
+            }
+            .artisan-card-content::-webkit-scrollbar-track {
+              background: transparent;
+            }
+            .artisan-card-content::-webkit-scrollbar-thumb {
+              background: rgba(182, 224, 255, 0.3);
+              border-radius: 3px;
+            }
+            .artisan-card-content::-webkit-scrollbar-thumb:hover {
+              background: rgba(182, 224, 255, 0.5);
+            }
+          `}</style>
+          <div style={{ marginBottom: "12px" }}>
+            <div
+              style={{
+                marginBottom: "8px",
+                fontSize: "0.95rem",
+                lineHeight: 1.4,
+                color: "#e0e0e0",
+              }}
+            >
+              <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                Category:
+              </strong>{" "}
+              {craft.craft_category || "-"}
+            </div>
+            {craft.subcategory && (
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                  color: "#e0e0e0",
+                }}
+              >
+                <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                  Subcategory:
+                </strong>{" "}
+                {craft.subcategory}
+              </div>
+            )}
+            {craft.cultural_heritage && (
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                  color: "#e0e0e0",
+                }}
+              >
+                <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                  Cultural Heritage:
+                </strong>{" "}
+                {craft.cultural_heritage}
+              </div>
+            )}
+
+            {craft.primary_materials && craft.primary_materials.length > 0 && (
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                  color: "#e0e0e0",
+                }}
+              >
+                <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                  Materials:
+                </strong>{" "}
+                {craft.primary_materials.join(", ")}
+              </div>
+            )}
+
+            {craft.techniques_used && craft.techniques_used.length > 0 && (
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                  color: "#e0e0e0",
+                }}
+              >
+                <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                  Techniques:
+                </strong>{" "}
+                {craft.techniques_used.join(", ")}
+              </div>
+            )}
+
+            {craft.tools_used && craft.tools_used.length > 0 && (
+              <div
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                  color: "#e0e0e0",
+                }}
+              >
+                <strong style={{ color: "#b6e0ff", fontWeight: 600 }}>
+                  Tools:
+                </strong>{" "}
+                {craft.tools_used.join(", ")}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Chat Button - Fixed at bottom */}
+        <button
+          onClick={onChatClick}
+          style={{
+            background: "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
+            color: "#0a0a0f",
+            border: "none",
+            borderRadius: 10,
+            padding: "0.7rem 1.5rem",
+            fontWeight: 700,
+            fontSize: "1rem",
+            cursor: "pointer",
+            boxShadow: "0 1px 4px rgba(97,218,251,0.10)",
+            transition:
+              "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.13s",
+            outline: "none",
+            transform: "scale(1)",
+            width: "100%",
+            flexShrink: 0, // Prevent shrinking
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background =
+              "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
+            e.currentTarget.style.boxShadow =
+              "0 4px 16px 0 rgba(97,218,251,0.25)";
+            e.currentTarget.style.transform = "scale(1.02)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background =
+              "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
+            e.currentTarget.style.boxShadow = "0 1px 4px rgba(97,218,251,0.10)";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = "scale(0.98)";
+          }}
+          onMouseUp={(e) => {
+            e.currentTarget.style.transform = "scale(1.02)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
+            e.currentTarget.style.boxShadow = "0 1px 4px rgba(97,218,251,0.10)";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+        >
+          Chat with AI
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ArtisanProfileCard({ artisan }) {
   if (!artisan) return null;
   const profile = artisan.artisan_profile || {};
@@ -1085,6 +1434,52 @@ export default function LandingPage() {
               font-size: 1.1rem !important;
               align-self: stretch !important;
             }
+            
+            /* Artisan Cards Grid Mobile Responsive */
+            .artisan-cards-grid {
+              display: grid !important;
+              grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+              gap: 28px !important;
+              align-items: start !important;
+            }
+            
+            @media (max-width: 768px) {
+              .artisan-cards-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+              }
+            }
+            
+            @media (max-width: 480px) {
+              .artisan-cards-grid {
+                gap: 16px !important;
+              }
+            }
+                gap: 20px !important;
+                padding: 0 8px !important;
+              }
+            }
+            
+            @media (max-width: 480px) {
+              .artisan-cards-grid {
+                gap: 16px !important;
+                padding: 0 4px !important;
+              }
+            }
+            
+            @media (min-width: 769px) and (max-width: 1024px) {
+              .artisan-cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+                gap: 20px !important;
+              }
+            }
+            
+            @media (min-width: 1025px) {
+              .artisan-cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+                gap: 28px !important;
+              }
+            }
           }
         `}</style>
         <h1
@@ -1303,7 +1698,6 @@ export default function LandingPage() {
                 <div
                   style={{
                     width: "100%",
-                    overflowX: "auto",
                     marginLeft: "auto",
                     marginRight: "auto",
                     boxSizing: "border-box",
@@ -1311,230 +1705,25 @@ export default function LandingPage() {
                     paddingRight: 8,
                   }}
                 >
-                  <table
+                  <div
                     style={{
-                      minWidth: 900,
-                      width: "100%",
-                      background: "rgba(20,20,30,0.85)",
-                      backdropFilter: "blur(6px)",
-                      borderRadius: 18,
-                      overflow: "hidden",
-                      boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-                      color: "#fff",
-                      fontSize: "1.05rem",
-                      borderCollapse: "collapse",
+                      display: "grid",
+                      gridTemplateColumns:
+                        "repeat(auto-fill, minmax(350px, 1fr))",
+                      gap: "28px",
+                      marginBottom: "30px",
+                      alignItems: "start", // Align cards to top
                     }}
+                    className="artisan-cards-grid"
                   >
-                    <thead>
-                      <tr
-                        style={{
-                          background: "rgba(255,255,255,0.08)",
-                          fontWeight: 800,
-                          letterSpacing: "-0.5px",
-                          fontSize: "1.08rem",
-                          textShadow: "0 1px 8px rgba(0,0,0,0.10)",
-                        }}
-                      >
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Name
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Category
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Subcategory
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Cultural Heritage
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Primary Materials
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Techniques Used
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Tools Used
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          Product Photos
-                        </th>
-                        <th
-                          style={{
-                            padding: "0.9rem 0.7rem",
-                            textAlign: "left",
-                          }}
-                        >
-                          AI
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pagedResults.map((artisan, idx) => (
-                        <tr
-                          key={idx}
-                          style={{
-                            background:
-                              idx % 2 === 0
-                                ? "rgba(255,255,255,0.03)"
-                                : "rgba(255,255,255,0.01)",
-                            transition: "background 0.2s, box-shadow 0.2s",
-                          }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.background =
-                              "rgba(102,204,255,0.10)";
-                            e.currentTarget.style.boxShadow =
-                              "0 2px 12px rgba(102,204,255,0.10)";
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.background =
-                              idx % 2 === 0
-                                ? "rgba(255,255,255,0.03)"
-                                : "rgba(255,255,255,0.01)";
-                            e.currentTarget.style.boxShadow = "none";
-                          }}
-                        >
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.artisan_profile?.name || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.craft_details?.craft_category || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.craft_details?.subcategory || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {artisan.craft_details?.cultural_heritage || "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {Array.isArray(
-                              artisan.craft_details?.primary_materials
-                            ) &&
-                            artisan.craft_details.primary_materials.length > 0
-                              ? artisan.craft_details.primary_materials.join(
-                                  ", "
-                                )
-                              : "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {Array.isArray(
-                              artisan.craft_details?.techniques_used
-                            ) &&
-                            artisan.craft_details.techniques_used.length > 0
-                              ? artisan.craft_details.techniques_used.join(", ")
-                              : "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {Array.isArray(artisan.craft_details?.tools_used) &&
-                            artisan.craft_details.tools_used.length > 0
-                              ? artisan.craft_details.tools_used.join(", ")
-                              : "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            {Array.isArray(
-                              artisan.craft_details?.product_photos
-                            ) && artisan.craft_details.product_photos.length > 0
-                              ? artisan.craft_details.product_photos.length +
-                                " photo(s)"
-                              : "-"}
-                          </td>
-                          <td style={{ padding: "0.8rem 0.7rem" }}>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setFocusArtisan(artisan);
-                              }}
-                              style={{
-                                background:
-                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)",
-                                color: "#0a0a0f",
-                                border: "none",
-                                borderRadius: 10,
-                                padding: "0.5rem 1.1rem",
-                                fontWeight: 700,
-                                fontSize: "1rem",
-                                cursor: "pointer",
-                                boxShadow: "0 1px 4px rgba(97,218,251,0.10)",
-                                transition:
-                                  "background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.13s",
-                                outline: "none",
-                                transform: "scale(1)",
-                              }}
-                              onMouseOver={(e) => {
-                                e.currentTarget.style.background =
-                                  "linear-gradient(90deg,#b6e0ff 0%,#61dafb 100%)";
-                                e.currentTarget.style.boxShadow =
-                                  "0 4px 16px 0 rgba(97,218,251,0.25)";
-                                e.currentTarget.style.transform = "scale(1.06)";
-                              }}
-                              onMouseOut={(e) => {
-                                e.currentTarget.style.background =
-                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
-                                e.currentTarget.style.boxShadow =
-                                  "0 1px 4px rgba(97,218,251,0.10)";
-                                e.currentTarget.style.transform = "scale(1)";
-                              }}
-                              onMouseDown={(e) => {
-                                e.currentTarget.style.transform = "scale(0.97)";
-                              }}
-                              onMouseUp={(e) => {
-                                e.currentTarget.style.transform = "scale(1.06)";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background =
-                                  "linear-gradient(90deg,#61dafb 0%,#b6e0ff 100%)";
-                                e.currentTarget.style.boxShadow =
-                                  "0 1px 4px rgba(97,218,251,0.10)";
-                                e.currentTarget.style.transform = "scale(1)";
-                              }}
-                            >
-                              Chat
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                    {pagedResults.map((artisan, idx) => (
+                      <ArtisanSearchCard
+                        key={idx}
+                        artisan={artisan}
+                        onChatClick={() => setFocusArtisan(artisan)}
+                      />
+                    ))}
+                  </div>
                 </div>
                 {/* Pagination controls */}
                 <div
